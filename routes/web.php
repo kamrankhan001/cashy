@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{AuthController, DashboardController};
+use App\Http\Controllers\Admin\AdminDashboardController;
+
 
 
 Route::redirect('/', '/login');
@@ -23,4 +25,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function() {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });

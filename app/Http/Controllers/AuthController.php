@@ -31,6 +31,11 @@ class AuthController extends Controller
             // If login is successful, regenerate the session and redirect
             $request->session()->regenerate();
 
+            if($request->user()->is_admin){
+                // Redirect to intended page or dashboard
+            return redirect()->route('admin.dashboard');
+            }
+
             // Redirect to intended page or dashboard
             return redirect()->intended('dashboard');
         }
