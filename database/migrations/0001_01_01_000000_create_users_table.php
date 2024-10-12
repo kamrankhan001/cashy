@@ -21,7 +21,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_admin')->default(false);
+            $table->enum('initial_deposit', ['no', 'yes'])->default('no');
+            $table->enum('verified_deposit', ['pending', 'verified'])->default('pending');
             $table->string('ref_link')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

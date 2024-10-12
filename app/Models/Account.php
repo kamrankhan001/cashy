@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Account extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'amount',
-        'type',
-        'deposit_picture',
+        'bank_name',
+        'account_name',
+        'account_number',
         'user_id',
     ];
 

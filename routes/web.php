@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{AuthController, DashboardController};
-use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\{AdminDashboardController, AdminUserController};
 
 
 
@@ -29,4 +29,11 @@ Route::middleware('auth')->group(function() {
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function() {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Users
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users');
+    Route::get('/users/{user}/view', [AdminUserController::class, 'view'])->name('users.view');
+    Route::put('/users/{user}/update/deposit/status', [AdminUserController::class, 'updateDepositStatus'])->name('users.updateDepositStatus');
+
+
 });

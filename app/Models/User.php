@@ -25,6 +25,8 @@ class User extends Authenticatable
         'city',
         'address',
         'is_admin',
+        'initial_deposit',
+        'verified_deposit',
         'ref_link',
     ];
 
@@ -49,5 +51,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function account()
+    {
+        return $this->hasOne(Account::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }
