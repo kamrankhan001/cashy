@@ -3,10 +3,8 @@
 @section('title', 'dashboard')
 
 @section('main')
-    <!-- Header -->
-    <header class="text-center p-4 bg-indigo-900 text-white">
-        <h1 class="text-4xl font-bold uppercase">Cashy</h1>
-    </header>
+
+    @include('include.header')
 
     <div class="max-w-screen-lg mx-auto">
         @if (session('success'))
@@ -40,44 +38,20 @@
                         alt="Daily Work" />
                     <h2 class="text-xl font-bold">Daily Work</h2>
                 </div>
-                <div class="bg-white shadow-lg p-6 rounded-lg text-center">
+                <a href="{{ route('profile', ['user' => auth()->user()->id]) }}" class="block bg-white shadow-lg p-6 rounded-lg text-center">
                     <img src="https://img.icons8.com/color/96/000000/user.png" class="mx-auto mb-4" alt="My Profile" />
                     <h2 class="text-xl font-bold">My Profile</h2>
-                </div>
-                <div class="bg-white shadow-lg p-6 rounded-lg text-center">
+                </a>
+                <a href="{{ route('wallet', ['user' => auth()->user()->id]) }}" class="block bg-white shadow-lg p-6 rounded-lg text-center">
                     <img src="https://img.icons8.com/fluency/96/000000/wallet.png" class="mx-auto mb-4" alt="My Wallet" />
                     <h2 class="text-xl font-bold">My Wallet</h2>
-                </div>
-                <div class="bg-white shadow-lg p-6 rounded-lg text-center">
+                </a>
+                <a href="{{ route('settings') }}" class="block bg-white shadow-lg p-6 rounded-lg text-center">
                     <img src="https://img.icons8.com/fluency/96/000000/settings.png" class="mx-auto mb-4" alt="Settings" />
                     <h2 class="text-xl font-bold">Settings</h2>
-                </div>
+                </a>
             </section>
 
-
-            <footer class="bg-indigo-900 text-white py-4 fixed bottom-0 left-0 right-0 mx-auto">
-                <nav class="flex justify-center space-x-10 items-center">
-                    <a href="#" class="hover:underline">
-                        <img src="https://img.icons8.com/fluency/48/000000/home.png" alt="Home" />
-                    </a>
-                    <a href="#" class="hover:underline">
-                        <img src="https://img.icons8.com/color/48/000000/user.png" alt="Profile" />
-                    </a>
-                    <a href="#" class="hover:underline">
-                        <img src="https://img.icons8.com/fluency/48/000000/wallet.png" alt="Wallet" />
-                    </a>
-                    <a href="#" class="hover:underline">
-                        <img src="https://img.icons8.com/fluency/48/000000/settings.png" alt="Settings" />
-                    </a>
-                    <!-- Logout Button -->
-                    <form action="{{ route('logout') }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="text-sm text-indigo-600 hover:underline">
-                            <img src="https://img.icons8.com/fluency/48/000000/exit.png" alt="Log Out" />
-                        </button>
-                    </form>
-                </nav>
-            </footer>
             <!-- Footer -->
         @else
             <!-- Warning Alert -->
@@ -94,6 +68,8 @@
                 </button>
             </form>
         @endif
+
+        @include('include.footer')
 
     </div>
 @endsection

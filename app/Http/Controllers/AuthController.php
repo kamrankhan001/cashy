@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use App\Mail\RegisterConfirmMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
@@ -31,9 +32,9 @@ class AuthController extends Controller
             // If login is successful, regenerate the session and redirect
             $request->session()->regenerate();
 
-            if($request->user()->is_admin){
+            if ($request->user()->is_admin) {
                 // Redirect to intended page or dashboard
-            return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard');
             }
 
             // Redirect to intended page or dashboard
@@ -80,7 +81,7 @@ class AuthController extends Controller
         // Log the user in after successful registration
         Auth::login($user);
 
-        defer(fn () =>  Mail::to($validatedData['email'])->send(new RegisterConfirmMail()));
+        defer(fn() => Mail::to($validatedData['email'])->send(new RegisterConfirmMail()));
 
         // Redirect to a desired page, such as the dashboard
         return redirect()->route('confirm.registration');
@@ -101,4 +102,32 @@ class AuthController extends Controller
         return view('post-register');
     }
 
+    public function settings()
+    {
+        return view('setting');
+    }
+
+    public function passwordUpdate(Request $request)
+    {
+        // Validate the input
+        $request->validate([
+            'current_password' => ['required'],
+            'new_password' => ['required', 'min:8', 'confirmed'],
+        ]);
+
+        // Check if current password is correct
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => 'The current password is incorrect.',
+            ]);
+        }
+
+        // Update the user's password
+        Auth::user()->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        // Optionally redirect with a success message
+        return redirect()->route('settings')->with('success', 'Password successfully updated.');
+    }
 }

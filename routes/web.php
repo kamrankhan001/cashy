@@ -24,6 +24,19 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Settings
+    Route::get('/settings', [AuthController::class, 'settings'])->name('settings');
+    // Password Update
+    Route::post('/update/password', [AuthController::class, 'passwordUpdate'])->name('password.update');
+
+    // Profile
+    Route::get('/pofile/{user}', [DashboardController::class, 'pofile'])->name('profile');
+
+    // Wallet
+    Route::get('/wallet/{user}', [DashboardController::class, 'wallet'])->name('wallet');
+
+
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 

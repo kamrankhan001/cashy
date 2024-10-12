@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Account, Payment};
+use App\Models\{User, Account, Payment};
 
 class DashboardController extends Controller
 {
@@ -53,5 +53,15 @@ class DashboardController extends Controller
 
         // Redirect to the dashboard with a success message
         return redirect()->route('dashboard')->with('success', 'Your deposit information has been submitted successfully.');
+    }
+
+    public function pofile(User $user)
+    {
+        return view('profile', compact('user'));
+    }
+
+    public function wallet(User $user)
+    {
+        return view('wallet', compact('user'));
     }
 }
