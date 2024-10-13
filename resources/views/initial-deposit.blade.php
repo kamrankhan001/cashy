@@ -15,10 +15,10 @@
                 <div class="flex flex-col items-center">
                     <img src="{{ asset('imgs/jazzcash.png') }}" alt="JazzCash" class="w-20 h-20 mb-2" />
                     <p>
-                        <strong>Account Title:</strong> Mr John Doe
+                        <strong>Account Title:</strong> {{$settings->jazzcash_account_title}}
                     </p>
                     <p>
-                        <strong>Account number:</strong> 0342-55 66 789
+                        <strong>Account number:</strong> {{$settings->jazzcash_account_number}}
                     </p>
                     <p>
                         <strong>Bank Name:</strong> JazzCash
@@ -27,10 +27,10 @@
                 <div class="flex flex-col items-center mt-4 md:mt-0">
                     <img src="{{ asset('imgs/easypasa.jpeg') }}" alt="Easypaisa" class="w-20 h-20 mb-2" />
                     <p>
-                        <strong>Account Title:</strong> Mr John Doe
+                        <strong>Account Title:</strong> {{$settings->easy_asa_account_title}}
                     </p>
                     <p>
-                        <strong>Account number:</strong> 0342-55 66 789
+                        <strong>Account number:</strong> {{$settings->easy_asa_account_number}}
                     </p>
                     <p>
                         <strong>Bank Name:</strong> EasyPaisa

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{User, Account, Payment};
+use App\Models\{User, Account, Payment, Wallet, WithdrawRequest, Setting};
 
 class DashboardController extends Controller
 {
@@ -14,7 +14,8 @@ class DashboardController extends Controller
 
     public function initialDeposit()
     {
-        return view('initial-deposit');
+        $settings = Setting::first();
+        return view('initial-deposit', compact('settings'));
     }
 
     public function storeDeposit(Request $request)
@@ -51,8 +52,18 @@ class DashboardController extends Controller
         $user->markEmailAsVerified();
         $user->save();
 
+        Wallet::create([
+            'amount' => '500',
+            'user_id' => $user->id,
+        ]);
+
         // Redirect to the dashboard with a success message
         return redirect()->route('dashboard')->with('success', 'Your deposit information has been submitted successfully.');
+    }
+
+    public function work(User $user)
+    {
+        return view('work', compact('user'));
     }
 
     public function pofile(User $user)
@@ -63,5 +74,22 @@ class DashboardController extends Controller
     public function wallet(User $user)
     {
         return view('wallet', compact('user'));
+    }
+
+    public function requestForWithdraw(Request $request, User $user)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        WithdrawRequest::create([
+            'amount' => $request->amount,
+            'user_id' => auth()->user()->id,
+        ]);
+
+        $user->wallet->amount = $user->wallet->amount - $request->amount;
+        $user->wallet->save();
+
+        return redirect()->back()->with('success', 'your request submitted successfully');
     }
 }

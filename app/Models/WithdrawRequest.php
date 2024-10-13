@@ -5,13 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WithDraw extends Model
+class WithdrawRequest extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'amount',
-        'payment_id',
+        'status',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

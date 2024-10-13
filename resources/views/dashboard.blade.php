@@ -18,9 +18,14 @@
                 <div class="w-96 bg-gradient-to-r from-green-400 to-indigo-500 text-white p-4 rounded-lg shadow-lg">
                     <div class="text-right text-xl">60</div>
                     <div class="text-2xl font-semibold">524 538539571</div>
-                    <div class="text-sm">CARD HOLDER</div>
-                    <div class="font-bold text-lg">MughÁL ZÁdi</div>
-                    <div class="text-sm">USER LEVEL: 2</div>
+                    <div class="flex my-3 gap-1 items-center justify-between">
+                        <h3>CARD HOLDER</h3>
+                        <h4>{{auth()->user()->name}}</h4>
+                    </div>
+                    <div class="flex my-3 gap-1 items-center justify-between">
+                        <h3> USER LEVEL</h3>
+                        <h4>2</h4>
+                    </div>
                 </div>
             </section>
 
@@ -33,11 +38,11 @@
 
             <!-- Icons Section -->
             <section class="grid grid-cols-2 gap-4 p-4 max-w-lg mx-auto">
-                <div class="bg-white shadow-lg p-6 rounded-lg text-center">
+                <a href="{{ route('work', ['user' => auth()->user()->id]) }}" class="bg-white shadow-lg p-6 rounded-lg text-center">
                     <img src="https://img.icons8.com/?size=100&id=K2e3XRZlbIp2&format=png&color=000000" class="mx-auto mb-4"
                         alt="Daily Work" />
                     <h2 class="text-xl font-bold">Daily Work</h2>
-                </div>
+                </a>
                 <a href="{{ route('profile', ['user' => auth()->user()->id]) }}" class="block bg-white shadow-lg p-6 rounded-lg text-center">
                     <img src="https://img.icons8.com/color/96/000000/user.png" class="mx-auto mb-4" alt="My Profile" />
                     <h2 class="text-xl font-bold">My Profile</h2>

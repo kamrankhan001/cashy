@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\{User, Setting};
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'country' => 'UK',
@@ -23,6 +23,15 @@ class DatabaseSeeder extends Seeder
             'address' => 'some address here',
             'password' => '12345678',
             'is_admin' => true,
+        ]);
+
+        Setting::create([
+            'jazzcash_account_title' => 'Admin',
+            'jazzcash_account_number' => '0300 0011011',
+            'easy_asa_account_title' => 'Admin',
+            'easy_asa_account_number' => '0300 0011011',
+            'per_coin_price' => '0.5',
+            'job_per_coin' => '10',
         ]);
     }
 }
