@@ -5,9 +5,24 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{AuthController, DashboardController};
 use App\Http\Controllers\Admin\{AdminDashboardController, AdminUserController, AdminWorkController, AdminSettingController, AdminWithDrawController};
 
+
+Route::get('clear-all', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+
+    return 'Application cache, config, view, and route caches cleared successfully';
+});
+
+Route::get('create-link-storage', function(){
+    Artisan::call('storage:link');
+    return 'storage linked successfully';
+});
+
 Route::redirect('/', '/login');
 
-Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/register/{user?}', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'store'])->name('store.register');
 
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -24,6 +39,10 @@ Route::middleware('auth')->group(function () {
 
     // Work
     Route::get('/work/{user}', [DashboardController::class, 'work'])->name('work');
+    Route::put('/work/{user}/track/{work}', [DashboardController::class, 'trackAndRedirect'])->name('work.track');
+
+    // Team
+    Route::get('/team/{user}', [DashboardController::class, 'team'])->name('team');
 
     // Settings
     Route::get('/settings', [AuthController::class, 'settings'])->name('settings');
@@ -60,7 +79,9 @@ Route::prefix('admin')
 
         // WithDraw Requests
         Route::get('/withdraw/request', [AdminWithDrawController::class, 'index'])->name('withdraw');
-        Route::get('/withdraw/request/user/{user}', [AdminWithDrawController::class, 'userDetails'])->name('withdraw.user');
+        Route::get('/withdraw/request/{withDrawRequest}', [AdminWithDrawController::class, 'userDetails'])->name('withdraw.user');
+        Route::put('/withdraw/request/{withDrawRequest}', [AdminWithDrawController::class, 'requestUpdate'])->name('withdraw.request.update');
+
 
         // Setting
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings');

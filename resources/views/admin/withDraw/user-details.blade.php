@@ -5,6 +5,11 @@
 @section('main')
 
     <div class="container mx-auto px-4 py-6">
+        @if (session('success'))
+            <div class="bg-green-500 text-white p-4 rounded-lg my-4">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="flex flex-col md:flex-row justify-center items-center md:justify-between md:items-center mb-6">
             <nav class="flex mb-4 md:mb-0" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -31,27 +36,27 @@
                 <!-- User Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Name:</label>
-                    <p class="text-gray-800">{{ $user->name }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->name }}</p>
                 </div>
                 <!-- Email -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Email:</label>
-                    <p class="text-gray-800">{{ $user->email }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->email }}</p>
                 </div>
                 <!-- Country -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Country:</label>
-                    <p class="text-gray-800">{{ $user->country }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->country }}</p>
                 </div>
                 <!-- City -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">City:</label>
-                    <p class="text-gray-800">{{ $user->city }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->city }}</p>
                 </div>
                 <!-- Address -->
                 <div class="col-span-2">
                     <label class="block text-sm font-medium text-gray-700">Address:</label>
-                    <p class="text-gray-800">{{ $user->address }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->address }}</p>
                 </div>
             </div>
         </div>
@@ -63,27 +68,55 @@
                 <!-- Account Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Account Name:</label>
-                    <p class="text-gray-800">{{ $user->account->account_name }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->account?->account_name }}</p>
                 </div>
                 <!-- Bank Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Bank Name:</label>
-                    <p class="text-gray-800">{{ $user->account->bank_name }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->account?->bank_name }}</p>
                 </div>
                 <!-- Account Title -->
                 <div class="col-span-2">
                     <label class="block text-sm font-medium text-gray-700">Account Number:</label>
-                    <p class="text-gray-800">{{ $user->account->account_number }}</p>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->account?->account_number }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-md mt-6">
-            <h2 class="text-2xl font-bold mb-4">Update Request Status</h2>
-            <form action="#" method="POST">
-                @csrf
-                
-            </form>
+        <div class="bg-white p-6 shadow-lg rounded-lg my-6">
+            <h3 class="text-xl font-semibold mb-4">Update Request Status</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-1 items-center">
+                    <label class="block text-sm font-medium text-gray-700">Request Status</label>
+                    <span class="px-4 py-2 rounded-full">
+                        <span
+                            class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $withdrawRequest->status == 'pending' ? 'bg-gray-400' : 'bg-green-500' }}">
+                            {{ $withdrawRequest->status }}
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Form to Update Deposit Verification -->
+            <div class="mt-6">
+                <form action="{{ route('admin.withdraw.request.update', $withdrawRequest?->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <label for="request_status" class="block text-sm font-medium text-gray-700">Update Verification
+                        Status:</label>
+                    <select id="request_status" name="request_status"
+                        class="p-2 border border-gray-300 rounded w-full mb-4">
+                        <option value="pending" {{ $withdrawRequest->status == 'pending' ? 'selected' : '' }}>Pending
+                        </option>
+                        <option value="verified" {{ $withdrawRequest->status == 'verified' ? 'selected' : '' }}>Verified
+                        </option>
+                    </select>
+                    <button type="submit"
+                        class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-500 transition duration-300">
+                        Update Status
+                    </button>
+                </form>
+            </div>
         </div>
 
     </div>

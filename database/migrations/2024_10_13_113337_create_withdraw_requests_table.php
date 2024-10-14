@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('withdraw_requests', function (Blueprint $table) {
             $table->id();
             $table->string('amount');
-            $table->enum('status', ['pending', 'verified']);
+            $table->enum('status', ['pending', 'verified'])->default('pending');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

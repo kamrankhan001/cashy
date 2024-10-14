@@ -9,8 +9,15 @@ class Reference extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'inviter',
-        'invitee',
-    ];
+    protected $fillable = ['inviter', 'invitee'];
+
+    public function inviterUser()
+    {
+        return $this->belongsTo(User::class, 'inviter');
+    }
+
+    public function inviteeUser()
+    {
+        return $this->belongsTo(User::class, 'invitee');
+    }
 }

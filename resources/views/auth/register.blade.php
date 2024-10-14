@@ -10,6 +10,7 @@
 
             <!-- Name and Email in one row for larger screens, stacked on smaller -->
             <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4 mb-4">
+                <input type="hidden" name="inviter" value="{{$user}}">
                 <!-- Name Input -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Name</label>

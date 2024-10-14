@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Mail\RegisterConfirmMail;
 use Illuminate\Support\Facades\Mail;
-use App\Models\User;
+use App\Models\{User, Reference};
 
 class AuthController extends Controller
 {
@@ -49,9 +49,9 @@ class AuthController extends Controller
             ->onlyInput('email');
     }
 
-    public function register()
+    public function register($user = null)
     {
-        return view('auth.register');
+        return view('auth.register', compact('user'));
     }
 
     public function store(Request $request)
@@ -77,6 +77,13 @@ class AuthController extends Controller
             'phone' => $validatedData['phone'],
             'password' => Hash::make($validatedData['password']), // Hash the password before storing
         ]);
+
+        if($request->inviter){
+            Reference::create([
+                'inviter' => $request->inviter,
+                'invitee' => $user->id,
+            ]);
+        }
 
         // Log the user in after successful registration
         Auth::login($user);

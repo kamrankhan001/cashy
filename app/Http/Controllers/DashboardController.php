@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{User, Account, Payment, Wallet, WithdrawRequest, Setting};
+use App\Models\{User, Account, Payment, Wallet, WithdrawRequest, Setting, Work, Reference};
 
 class DashboardController extends Controller
 {
@@ -32,7 +32,6 @@ class DashboardController extends Controller
         // Store the deposit picture in the 'public/deposits' directory
         $depositPicturePath = $request->file('deposit_picture')->store('deposits', 'public');
 
-
         Account::create([
             'bank_name' => $request->bank_name,
             'account_name' => $request->account_name,
@@ -57,13 +56,53 @@ class DashboardController extends Controller
             'user_id' => $user->id,
         ]);
 
+        $reference = Reference::where('invitee', $user->id)->first();
+
+        if ($reference) {
+            $inviter = User::find($reference->inviter);
+
+            if ($inviter && $inviter->wallet) {
+                $amount = $inviter->wallet->amount;
+                $inviter->wallet->amount = (float) $amount + 200;
+                $inviter->wallet->save();
+            }
+        }
+
         // Redirect to the dashboard with a success message
         return redirect()->route('dashboard')->with('success', 'Your deposit information has been submitted successfully.');
     }
 
     public function work(User $user)
     {
-        return view('work', compact('user'));
+        $works = Work::where('visited', false)->latest()->get();
+        return view('work', compact('user', 'works'));
+    }
+
+    public function trackAndRedirect(User $user, Work $work)
+    {
+        // Ensure the user is authorized to visit the work
+        if (auth()->user()->id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 403); // Unauthorized access
+        }
+
+        // Mark work as visited by the user
+        $work->user_id = $user->id;
+        $work->visited = true;
+        $work->save();
+
+        // Add coins to user's wallet
+        $coinPrWork = Setting::select('job_per_coin')->first()->job_per_coin;
+        $user->wallet->amount += (float) $coinPrWork;
+        $user->wallet->save();
+
+        // Return JSON with the redirect URL
+        return response()->json(
+            [
+                'message' => 'Work tracked successfully',
+                'redirect_url' => $work->url,
+            ],
+            200,
+        );
     }
 
     public function pofile(User $user)
@@ -73,7 +112,9 @@ class DashboardController extends Controller
 
     public function wallet(User $user)
     {
-        return view('wallet', compact('user'));
+        $amount = $this->getAmount($user);
+
+        return view('wallet', compact('user', 'amount'));
     }
 
     public function requestForWithdraw(Request $request, User $user)
@@ -91,5 +132,22 @@ class DashboardController extends Controller
         $user->wallet->save();
 
         return redirect()->back()->with('success', 'your request submitted successfully');
+    }
+
+    public function team(User $user)
+    {
+        // $members = Reference::where('inviter', $user->id)->latest()->first();
+        // dd($members->inviterUser->name);
+        $link = route('register', ['user' => $user->id]);
+        return view('team', compact('user', 'link'));
+    }
+
+    protected function getAmount($user)
+    {
+        $settings = Setting::first();
+
+        $amount = $settings->per_coin_price * $user->wallet->amount;
+
+        return $amount;
     }
 }

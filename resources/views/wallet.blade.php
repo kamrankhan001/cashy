@@ -19,10 +19,14 @@
             <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->amount }} Coins</p>
 
             <!-- Exchange to PKR Button -->
+            @if ($user->verified_deposit == 'verified')
             <button data-modal-target="exchangeModal" data-modal-toggle="exchangeModal"
                 class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
-                Exchange to PKR Cash
+                Convert to PKR
             </button>
+            @else
+            <p>You can withdraw this after varified.</p>
+            @endif
         </div>
 
         <!-- Transaction History Section -->
@@ -40,14 +44,20 @@
                     </thead>
                     <tbody>
                         <!-- Loop through transactions (dummy data for now) -->
-                        {{-- @foreach ($transactions as $transaction)
+                        @foreach ($user->withDrawRequests()->latest()->get() as $withDrawRequest)
                             <tr>
-                                <td class="py-2 px-4 border-b">{{ $transaction->date }}</td>
-                                <td class="py-2 px-4 border-b">{{ $transaction->time }}</td>
-                                <td class="py-2 px-4 border-b">{{ $transaction->amount }} Coins</td>
-                                <td class="py-2 px-4 border-b">{{ $transaction->status }}</td>
+                                <td class="py-2 px-4 border-b">{{ $withDrawRequest->updated_at->format('M d, Y') }}</td>
+                                <td class="py-2 px-4 border-b">{{ $withDrawRequest->updated_at->format('H:i:s') }}</td>
+                                <td class="py-2 px-4 border-b">{{ $withDrawRequest->amount }} Coins</td>
+                                <td class="py-2 px-4 border-b">
+                                    <span
+                                        class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $withDrawRequest->status == 'pending' ? 'bg-gray-400' : 'bg-green-500' }}">
+                                        {{ $withDrawRequest->status }}
+                                    </span>
+
+                                </td>
                             </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -60,7 +70,7 @@
                     <!-- Modal Header -->
                     <div class="flex justify-between items-center p-5 border-b">
                         <h3 class="text-lg font-medium text-gray-900">
-                            Exchange Coins to PKR
+                            Convert Coins to PKR
                         </h3>
                         <button type="button" class="text-gray-400 hover:text-gray-500" data-modal-hide="exchangeModal">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -79,14 +89,19 @@
                                     (Coins)</label>
                                 <input type="number" name="amount" id="amount" placeholder="Enter amount"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    required>
+                                    required @if($amount < 200) disabled @endif>
                             </div>
+                            <p>PKR {{$amount}}</p>
                             <!-- Submit Button -->
                             <div class="flex justify-end">
-                                <button type="submit"
-                                    class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
-                                    Submit Request
-                                </button>
+                                @if ($amount >= 200)
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
+                                        Submit Request
+                                    </button>
+                                @else
+                                    <p class="text-sm text-red-500">You have infuficent balance.</p>
+                                @endif
                             </div>
                         </form>
                     </div>

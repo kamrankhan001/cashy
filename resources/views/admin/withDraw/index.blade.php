@@ -48,10 +48,13 @@
                                 {{ $withDrawRequest->amount }}
                             </td>
                             <td class="px-6 py-4">
-                                pending
+                                <span
+                                class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $withDrawRequest->status == 'pending' ? 'bg-gray-400' : 'bg-green-500' }}">
+                                {{ $withDrawRequest->status }}
+                            </span>
                             </td>
                             <td class="px-6 py-4 flex space-x-4">
-                                <a href="{{route('admin.withdraw.user', ['user'=>$withDrawRequest->user->id])}}" class="text-indigo-600 hover:underline">View</a>
+                                <a href="{{route('admin.withdraw.user', ['withDrawRequest'=>$withDrawRequest->id])}}" class="text-indigo-600 hover:underline">View</a>
                             </td>
                             </td>
                         </tr>

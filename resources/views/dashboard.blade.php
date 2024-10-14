@@ -37,7 +37,7 @@
             </section>
 
             <!-- Icons Section -->
-            <section class="grid grid-cols-2 gap-4 p-4 max-w-lg mx-auto">
+            <section class="grid grid-cols-2 gap-4 p-4 max-w-lg mx-auto mb-32">
                 <a href="{{ route('work', ['user' => auth()->user()->id]) }}" class="bg-white shadow-lg p-6 rounded-lg text-center">
                     <img src="https://img.icons8.com/?size=100&id=K2e3XRZlbIp2&format=png&color=000000" class="mx-auto mb-4"
                         alt="Daily Work" />
@@ -51,7 +51,11 @@
                     <img src="https://img.icons8.com/fluency/96/000000/wallet.png" class="mx-auto mb-4" alt="My Wallet" />
                     <h2 class="text-xl font-bold">My Wallet</h2>
                 </a>
-                <a href="{{ route('settings') }}" class="block bg-white shadow-lg p-6 rounded-lg text-center">
+                <a href="{{ route('team', ['user' => auth()->user()->id]) }}" class="block bg-white shadow-lg p-6 rounded-lg text-center">
+                    <img src="https://img.icons8.com/?size=100&id=S46Zmx6vqojg&format=png&color=000000" class="mx-auto mb-4" alt="My Wallet" />
+                    <h2 class="text-xl font-bold">My Team</h2>
+                </a>
+                <a href="{{ route('settings') }}" class="col-span-2 block bg-white shadow-lg p-6 rounded-lg text-center">
                     <img src="https://img.icons8.com/fluency/96/000000/settings.png" class="mx-auto mb-4" alt="Settings" />
                     <h2 class="text-xl font-bold">Settings</h2>
                 </a>

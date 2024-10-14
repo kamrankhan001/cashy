@@ -17,28 +17,14 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'country',
-        'city',
-        'address',
-        'is_admin',
-        'initial_deposit',
-        'verified_deposit',
-        'ref_link',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'country', 'city', 'address', 'is_admin', 'initial_deposit', 'verified_deposit', 'ref_link'];
 
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * Get the attributes that should be cast.
@@ -71,5 +57,15 @@ class User extends Authenticatable
     public function withDrawRequests()
     {
         return $this->hasMany(WithdrawRequest::class);
+    }
+
+    public function references()
+    {
+        return $this->hasMany(Reference::class, 'inviter');
+    }
+
+    public function invitedBy()
+    {
+        return $this->hasMany(Reference::class, 'invitee');
     }
 }
