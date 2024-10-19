@@ -105,9 +105,27 @@ class DashboardController extends Controller
         );
     }
 
-    public function pofile(User $user)
+    public function profile(User $user)
     {
         return view('profile', compact('user'));
+    }
+
+    public function profileUpdate(Request $request, User $user)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'bank_name' => 'required|string|max:255',
+            'account_name' => 'required|string|max:255',
+            'account_number' => 'required|string|max:255',
+        ]);
+
+        $user->account->bank_name = $request->bank_name;
+        $user->account->account_name = $request->account_name;
+        $user->account->account_number = $request->account_number;
+
+        $user->account->save();
+
+        return redirect()->route('profile', ['user'=>$user->id])->with('success', 'Your account information updated successfully.');
     }
 
     public function wallet(User $user)

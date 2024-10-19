@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('jazzcash_account_number')->nullable();
             $table->string('easy_asa_account_title')->nullable();
             $table->string('easy_asa_account_number')->nullable();
-            $table->string('per_coin_price')->default('0.5');
-            $table->string('job_per_coin')->default('10');
+            $table->string('per_coin_price')->default('0.2');
+            $table->string('job_per_coin')->default('20');
             $table->timestamps();
         });
     }

@@ -6,7 +6,7 @@
 
     @include('include.header')
 
-    <div class="max-w-screen-lg mx-auto">
+    <div class="max-w-screen-lg mx-auto mb-20 sm:mb-20 md:mb-0">
         @if ($user->verified_deposit == 'pending')
             <div class="flex justify-center">
                 <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative my-4"
@@ -19,11 +19,14 @@
         @endif
 
         @if ($user->verified_deposit == 'verified')
-            <div class="mt-6">
+            <div class="mt-6 mx-3">
                 <h2 class="text-2xl font-bold mb-4">Your Work</h2>
-                <ul class="list-disc list-inside">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     @foreach ($works as $work)
-                        <li id="work-{{ $work->id }}">
+                        <div id="work-{{ $work->id }}"
+                            class="bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
+                            <h3 class="text-lg font-semibold mb-2">Work #{{ $loop->iteration }}</h3>
+                            <p class="text-gray-700">Click on the link below:</p>
                             <form action="{{ route('work.track', ['user' => $user->id, 'work' => $work->id]) }}"
                                 method="POST" class="work-form" data-work-id="{{ $work->id }}" style="display:inline;">
                                 @csrf
@@ -33,10 +36,11 @@
                                     {{ $work->url }}
                                 </button>
                             </form>
-                        </li>
+                        </div>
                     @endforeach
-                </ul>
+                </div>
             </div>
+
         @endif
 
     </div>

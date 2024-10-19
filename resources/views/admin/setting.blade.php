@@ -56,7 +56,7 @@
         {{-- Section 2: Account Settings --}}
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Account Settings</h3>
-            <form action="{{ route('admin.update-accounts') }}" method="POST" novalidate>
+            <form action="{{ route('admin.update-accounts', ['setting'=>$setting->id]) }}" method="POST" novalidate>
                 @csrf
                 {{-- JazzCash Section --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -111,7 +111,7 @@
         {{-- Section 3: Coin Settings --}}
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Coin Settings</h3>
-            <form action="{{ route('admin.update-coins') }}" method="POST" novalidate>
+            <form action="{{ route('admin.update-coins', ['setting'=>$setting->id]) }}" method="POST" novalidate>
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>

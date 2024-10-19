@@ -27,10 +27,10 @@ class AdminSettingController extends Controller
         // Update the settings in the database
         $setting->update(
             [
-                'jazzcash_account_title' => $request->input('jazzcash_account_title'),
-                'jazzcash_account_number' => $request->input('jazzcash_account_number'),
-                'easy_asa_account_title' => $request->input('easy_asa_account_title'),
-                'easy_asa_account_number' => $request->input('easy_asa_account_number'),
+                'jazzcash_account_title' => $request->jazzcash_title,
+                'jazzcash_account_number' => $request->jazzcash_number,
+                'easy_asa_account_title' => $request->easypaisa_title,
+                'easy_asa_account_number' => $request->easypaisa_number,
                 'updated_at' => now(),
             ],
         );
@@ -47,10 +47,9 @@ class AdminSettingController extends Controller
         ]);
 
         // Update the settings in the database
-        $setting->update(
-            [
-                'per_coin_price' => $request->input('per_coin_price'),
-                'job_per_coin' => $request->input('job_per_coin'),
+        $setting->update([
+                'per_coin_price' => $request->coin_price,
+                'job_per_coin' => $request->coins_per_work,
                 'updated_at' => now(),
             ],
         );

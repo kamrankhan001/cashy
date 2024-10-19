@@ -51,7 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/update/password', [AuthController::class, 'passwordUpdate'])->name('password.update');
 
     // Profile
-    Route::get('/pofile/{user}', [DashboardController::class, 'pofile'])->name('profile');
+    Route::get('/profile/{user}', [DashboardController::class, 'profile'])->name('profile');
+    Route::put('/profile/{user}/update', [DashboardController::class, 'profileUpdate'])->name('account.update');
+
 
     // Wallet
     Route::get('/wallet/{user}', [DashboardController::class, 'wallet'])->name('wallet');
@@ -85,6 +87,6 @@ Route::prefix('admin')
 
         // Setting
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings');
-        Route::post('settings/update-accounts', [AdminSettingController::class, 'updateAccountInfo'])->name('update-accounts');
-        Route::post('settings/update-coins', [AdminSettingController::class, 'updateCoinSettings'])->name('update-coins');
+        Route::post('settings/{setting}/update-accounts', [AdminSettingController::class, 'updateAccountInfo'])->name('update-accounts');
+        Route::post('settings/{setting}/update-coins', [AdminSettingController::class, 'updateCoinSettings'])->name('update-coins');
     });

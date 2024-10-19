@@ -88,10 +88,10 @@ class AuthController extends Controller
         // Log the user in after successful registration
         Auth::login($user);
 
-        defer(fn() => Mail::to($validatedData['email'])->send(new RegisterConfirmMail()));
+        //defer(fn() => Mail::to($validatedData['email'])->send(new RegisterConfirmMail()));
 
         // Redirect to a desired page, such as the dashboard
-        return redirect()->route('confirm.registration');
+        return redirect()->route('initial.deposit');
     }
 
     public function logout(Request $request)
