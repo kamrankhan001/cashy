@@ -24,7 +24,7 @@
                     </div>
                     <div class="flex my-3 gap-1 items-center justify-between">
                         <h3> USER LEVEL</h3>
-                        <h4>2</h4>
+                        <h4>{{auth()->user()->level}}</h4>
                     </div>
                 </div>
             </section>
@@ -64,11 +64,11 @@
             <!-- Footer -->
         @else
             <!-- Warning Alert -->
-            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative my-4"
+            <a href="{{route('initial.deposit')}}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative my-4 block"
                 role="alert">
                 <strong class="font-bold">Warning!</strong>
-                <span class="block sm:inline">You need to confirm your email to proceed.</span>
-            </div>
+                <span class="block sm:inline">Please deposit initial amount</span>
+            </a>
 
             <form action="{{ route('logout') }}" method="POST" class="text-center">
                 @csrf

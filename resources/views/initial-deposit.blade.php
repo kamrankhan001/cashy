@@ -47,7 +47,7 @@
                 <div class="mb-4 text-start">
                     <label for="bank_name" class="block text-left text-gray-700">Bank Name</label>
                     <input type="text" id="bank_name" name="bank_name" placeholder="Enter your bank name" required
-                        class="mt-1 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('bank_name') border-red-500 @enderror" value="{{old('bank_name')}}">
+                        class="mt-1 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('bank_name') border-red-500 @enderror" value="{{old('bank_name') ?? auth()->user()?->account?->bank_name}}">
                     @error('bank_name')
                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                     @enderror
@@ -57,7 +57,7 @@
                     <label for="account_name" class="block text-left text-gray-700">Account Name</label>
                     <input type="text" id="account_name" name="account_name" placeholder="Enter your account name"
                         required
-                        class="mt-1 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('account_name') border-red-500 @enderror" value="{{old('account_name')}}">
+                        class="mt-1 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('account_name') border-red-500 @enderror" value="{{old('account_name') ?? auth()->user()?->account?->account_name}}">
                     @error('account_name')
                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                     @enderror
@@ -67,7 +67,7 @@
                     <label for="account_number" class="block text-left text-gray-700">Account Number</label>
                     <input type="text" id="account_number" name="account_number" placeholder="Enter your account number"
                         required
-                        class="mt-1 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('account_number') border-red-500 @enderror" value="{{old('account_number')}}">
+                        class="mt-1 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('account_number') border-red-500 @enderror" value="{{old('account_number') ?? auth()->user()?->account?->account_number}}">
                     @error('account_number')
                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                     @enderror

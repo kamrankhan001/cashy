@@ -63,17 +63,17 @@
                 <!-- Account Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Account Name:</label>
-                    <p class="text-gray-800">{{ $user->account->account_name }}</p>
+                    <p class="text-gray-800">{{ $user?->account?->account_name }}</p>
                 </div>
                 <!-- Bank Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Bank Name:</label>
-                    <p class="text-gray-800">{{ $user->account->bank_name }}</p>
+                    <p class="text-gray-800">{{ $user?->account?->bank_name }}</p>
                 </div>
                 <!-- Account Number -->
                 <div class="col-span-2">
                     <label class="block text-sm font-medium text-gray-700">Account Number:</label>
-                    <p class="text-gray-800">{{ $user->account->account_number }}</p>
+                    <p class="text-gray-800">{{ $user?->account?->account_number }}</p>
                 </div>
             </div>
 
@@ -99,14 +99,14 @@
                     <div class="mb-4">
                         <label for="account_name" class="block text-sm font-medium text-gray-700">Account Name</label>
                         <input type="text" name="account_name" id="account_name"
-                            value="{{ $user->account->account_name }}"
+                            value="{{ $user?->account?->account_name }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
                     </div>
 
                     <!-- Bank Name -->
                     <div class="mb-4">
                         <label for="bank_name" class="block text-sm font-medium text-gray-700">Bank Name</label>
-                        <input type="text" name="bank_name" id="bank_name" value="{{ $user->account->bank_name }}"
+                        <input type="text" name="bank_name" id="bank_name" value="{{ $user?->account?->bank_name }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
                     </div>
 
@@ -114,7 +114,7 @@
                     <div class="mb-4">
                         <label for="account_number" class="block text-sm font-medium text-gray-700">Account Number</label>
                         <input type="text" name="account_number" id="account_number"
-                            value="{{ $user->account->account_number }}"
+                            value="{{ $user?->account?->account_number }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
                     </div>
 

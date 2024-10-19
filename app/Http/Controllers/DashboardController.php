@@ -32,12 +32,17 @@ class DashboardController extends Controller
         // Store the deposit picture in the 'public/deposits' directory
         $depositPicturePath = $request->file('deposit_picture')->store('deposits', 'public');
 
-        Account::create([
-            'bank_name' => $request->bank_name,
-            'account_name' => $request->account_name,
-            'account_number' => $request->account_number,
-            'user_id' => auth()->id(),
-        ]);
+        Account::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+            ],
+
+            [
+                'bank_name' => $request->bank_name,
+                'account_name' => $request->account_name,
+                'account_number' => $request->account_number,
+            ],
+        );
 
         Payment::create([
             'amount' => $request->amount,
@@ -164,11 +169,19 @@ class DashboardController extends Controller
             'account_number' => 'required|string|max:255',
         ]);
 
-        $user->account->bank_name = $request->bank_name;
-        $user->account->account_name = $request->account_name;
-        $user->account->account_number = $request->account_number;
+        if ($user->account) {
+            $user->account->bank_name = $request->bank_name;
+            $user->account->account_name = $request->account_name;
+            $user->account->account_number = $request->account_number;
 
-        $user->account->save();
+            $user->account->save();
+        } else {
+            $user->account()->create([
+                'bank_name' => $request->bank_name,
+                'account_name' => $request->account_name,
+                'account_number' => $request->account_number,
+            ]);
+        }
 
         return redirect()
             ->route('profile', ['user' => $user->id])
@@ -211,7 +224,7 @@ class DashboardController extends Controller
     {
         $settings = Setting::first();
 
-        $amount = $settings->per_coin_price * $user->wallet->amount;
+        $amount = $settings->per_coin_price * $user?->wallet?->amount;
 
         return $amount;
     }
