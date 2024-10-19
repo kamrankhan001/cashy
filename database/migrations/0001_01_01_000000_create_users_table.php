@@ -23,6 +23,10 @@ return new class extends Migration
             $table->boolean('is_admin')->default(false);
             $table->enum('initial_deposit', ['no', 'yes'])->default('no');
             $table->enum('verified_deposit', ['pending', 'verified'])->default('pending');
+            $table->enum('level', [1, 2, 3, 4, 5])->default(1);
+            $table->date('last_viewed_date')->nullable();
+            $table->integer('daily_work_count')->default(0);
+
             $table->string('ref_link')->nullable();
 
             $table->rememberToken();

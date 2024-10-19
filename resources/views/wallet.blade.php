@@ -25,7 +25,7 @@
 
                 <div class="bg-white border rounded-lg p-6 shadow-md">
                     <h2 class="text-2xl font-bold mb-4 capitalize">Daily Earning</h2>
-                    <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->amount }} Coins</p>
+                    <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->daily_earning }} Coins</p>
                 </div>
 
                 <div class="bg-white border rounded-lg p-6 shadow-md">

@@ -63,8 +63,25 @@ class DashboardController extends Controller
 
             if ($inviter && $inviter->wallet) {
                 $amount = $inviter->wallet->amount;
-                $inviter->wallet->amount = (float) $amount + 200;
+                $inviter->wallet->amount = (float) $amount + 100;
                 $inviter->wallet->save();
+            }
+
+            $totalReferences = Reference::where('invitee', $user->id)->count();
+
+            switch ($totalReferences) {
+                case 20:
+                    $inviter->level = 2;
+                    break;
+                case 40:
+                    $inviter->level = 3;
+                    break;
+                case 70:
+                    $inviter->level = 4;
+                    break;
+                case 100:
+                    $inviter->level = 5;
+                    break;
             }
         }
 
@@ -74,7 +91,20 @@ class DashboardController extends Controller
 
     public function work(User $user)
     {
-        $works = Work::where('visited', false)->latest()->get();
+        $level = $user->level;
+
+        $worksLimit = [
+            1 => 5,
+            2 => 10,
+            3 => 20,
+            4 => 30,
+            5 => 45,
+        ];
+
+        $take = $worksLimit[$level];
+
+        $works = Work::where('visited', false)->latest()->take($take)->get();
+
         return view('work', compact('user', 'works'));
     }
 
@@ -92,7 +122,22 @@ class DashboardController extends Controller
 
         // Add coins to user's wallet
         $coinPrWork = Setting::select('job_per_coin')->first()->job_per_coin;
+
+        // Update wallet amount
         $user->wallet->amount += (float) $coinPrWork;
+
+        // Get today's date
+        $today = now()->format('Y-m-d');
+
+        // Check if daily earning needs to be reset
+        if ($user->wallet->last_earning_date !== $today) {
+            $user->wallet->daily_earning = (float) $coinPrWork; // Set to current earning for today
+            $user->wallet->last_earning_date = $today; // Update last earning date
+        } else {
+            $user->wallet->daily_earning += (float) $coinPrWork; // Increment daily earning
+        }
+
+        // Save wallet updates
         $user->wallet->save();
 
         // Return JSON with the redirect URL
@@ -125,7 +170,9 @@ class DashboardController extends Controller
 
         $user->account->save();
 
-        return redirect()->route('profile', ['user'=>$user->id])->with('success', 'Your account information updated successfully.');
+        return redirect()
+            ->route('profile', ['user' => $user->id])
+            ->with('success', 'Your account information updated successfully.');
     }
 
     public function wallet(User $user)

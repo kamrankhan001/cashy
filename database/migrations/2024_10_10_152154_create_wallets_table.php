@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
             $table->string('amount');
+            $table->string('daily_earning')->default('0'); // Add daily_earning column
+            $table->date('last_earning_date')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
