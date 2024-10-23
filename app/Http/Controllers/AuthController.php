@@ -75,8 +75,11 @@ class AuthController extends Controller
             'city' => $validatedData['city'],
             'address' => $validatedData['address'],
             'phone' => $validatedData['phone'],
-            'password' => Hash::make($validatedData['password']), // Hash the password before storing
+            'password' => Hash::make($validatedData['password']),
         ]);
+
+        $user->ref_link = route('register', ['user' => $user->id]);
+        $user->save();
 
         if($request->inviter){
             Reference::create([

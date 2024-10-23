@@ -68,4 +68,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reference::class, 'invitee');
     }
+
+    public function works()
+    {
+        return $this->belongsToMany(Work::class, 'assign_works')
+            ->withPivot('isVisited')  // Include pivot table data
+            ->withTimestamps();  // Capture created_at and updated_at
+    }
 }

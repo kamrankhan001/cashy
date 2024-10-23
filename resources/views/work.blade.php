@@ -33,7 +33,7 @@
                                 @method('PUT')
                                 <button type="button" class="text-blue-600 hover:underline"
                                     onclick="trackWork({{ $work->id }})">
-                                    {{ $work->url }}
+                                    {{ $work->url }} <!-- Access the work URL directly -->
                                 </button>
                             </form>
                         </div>

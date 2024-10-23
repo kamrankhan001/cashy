@@ -36,7 +36,7 @@
             <!-- Copy Link Button -->
             <button id="copyButton"
                 class="px-6 py-3 bg-yellow-400 text-indigo-900 font-semibold rounded-full shadow-lg hover:bg-yellow-300 transition duration-200 focus:outline-none focus:ring-4 focus:ring-yellow-500"
-                data-link="{{ $link }}">
+                data-link="{{ $user->ref_link }}">
                 Copy Link
             </button>
         </div>
