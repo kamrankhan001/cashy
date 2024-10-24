@@ -6,7 +6,7 @@
 
     @include('include.header')
 
-    <div class="max-w-screen-lg mx-auto mb-20 sm:mb-20 md:mb-0">
+    <div class="max-w-screen-lg mx-auto mb-32">
         @if ($user->verified_deposit == 'pending')
             <div class="flex justify-center">
                 <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative my-4"
@@ -40,8 +40,8 @@
                     @endforeach
                 </div>
             </div>
-
         @endif
+
 
     </div>
 
@@ -49,29 +49,26 @@
 
     <script>
         function trackWork(workId) {
+
             const form = document.querySelector(`form[data-work-id="${workId}"]`);
-            const formData = new FormData(form);
             const liElement = document.getElementById(`work-${workId}`);
 
             fetch(form.action, {
-                    method: 'POST',
+                    method: 'PUT', // Directly use the PUT method
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        _method: 'PUT',
-                    })
+                    body: JSON.stringify({}) // Send an empty body if necessary
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.redirect_url) {
-                        // Remove the <li> element from the DOM
+                        // Remove the work item from the DOM
                         liElement.remove();
 
-                        // Redirect to the URL returned by the server
+                        // Open the redirect URL in a new tab
                         window.open(data.redirect_url, '_blank');
-
                     } else {
                         console.error('Error: Redirect URL not found');
                     }

@@ -57,6 +57,7 @@ Route::middleware('auth')->group(function () {
 
     // Wallet
     Route::get('/wallet/{user}', [DashboardController::class, 'wallet'])->name('wallet');
+    Route::get('/wallet/{user}/extra/coins/convert', [DashboardController::class, 'extraCoinConvert'])->name('extra.coins.convert');
     Route::post('/request/for/withdraw/{user}', [DashboardController::class, 'requestForWithdraw'])->name('request.withdraw');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

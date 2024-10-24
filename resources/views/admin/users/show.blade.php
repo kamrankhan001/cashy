@@ -75,15 +75,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Account Title:</label>
-                    <p class="text-gray-600">{{ $user->account->account_name }}</p>
+                    <p class="text-gray-600">{{ $user?->account?->account_name }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Bank Name:</label>
-                    <p class="text-gray-600">{{ $user->account->bank_name }}</p>
+                    <p class="text-gray-600">{{ $user?->account?->bank_name }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Account Number:</label>
-                    <p class="text-gray-600">{{ $user->account->account_number }}</p>
+                    <p class="text-gray-600">{{ $user?->account?->account_number }}</p>
                 </div>
             </div>
         </div>
@@ -95,22 +95,30 @@
                 <div class="flex gap-1 items-center">
                     <label class="block text-sm font-medium text-gray-700">Deposit Amount</label>
                     <span class="px-4 py-2 rounded-full">
-                        {{ $user->payments[0]->amount }}
-                    </span>
+                        @if ($user?->payments[0] ?? false)
+                            {{ $user->payments[0]->amount }}
+                        @endif
                 </div>
                 <div class="flex gap-1 items-center">
                     <label class="block text-sm font-medium text-gray-700">Screen Shot</label>
-                    <a href="{{ asset('storage/' . $user->payments[0]->deposit_picture) }}" target="_blank"
-                        class="px-4 py-2">
-                        <img src="{{ asset('storage/' . $user->payments[0]->deposit_picture) }}" alt="screen shot"
-                            class="w-10 h-10 rounded-full">
-                    </a>
+                    @if ($user?->payments[0] ?? false)
+                        <a href="{{ asset('storage/' . $user?->payments[0]?->deposit_picture) }}" target="_blank"
+                            class="px-4 py-2">
+                            <img src="{{ asset('storage/' . $user?->payments[0]?->deposit_picture) }}" alt="screen shot"
+                                class="w-10 h-10 rounded-full">
+                        </a>
+                    @else
+                        <span
+                            class="px-2 py-1 rounded-full text-white bg-purple-500 }}">
+                            no image
+                        </span>
+                    @endif
                 </div>
                 <div class="flex gap-1 items-center">
                     <label class="block text-sm font-medium text-gray-700">Initial Deposit Status:</label>
                     <span
                         class="px-4 py-2 rounded-full text-white {{ $user->initial_deposit == 'yes' ? 'bg-green-500' : 'bg-red-500' }}">
-                        {{ ucfirst($user->initial_deposit)}}
+                        {{ ucfirst($user->initial_deposit) }}
                     </span>
                 </div>
                 <div class="flex gap-1 items-center">

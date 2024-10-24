@@ -91,7 +91,7 @@ class DepositService
 
     public function updateInviterLevel($inviter)
     {
-        $totalReferences = Reference::where('invitee', $inviter->id)->count();
+        $totalReferences = Reference::where('inviter', $inviter->id)->count();
 
         // Update inviter's level and work limit based on the number of invitees
         $levelLimits = [
@@ -106,8 +106,9 @@ class DepositService
             500 => [10, 50],
         ];
 
+
         foreach ($levelLimits as $inviteCount => [$level, $workLimit]) {
-            if ($totalReferences >= $inviteCount) {
+            if ($totalReferences  >= $inviteCount) {
                 $inviter->level = $level;
                 $inviter->work_limit = $workLimit;
             }

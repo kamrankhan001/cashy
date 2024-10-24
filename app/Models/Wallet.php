@@ -11,6 +11,10 @@ class Wallet extends Model
 
     protected $fillable = [
         'amount',
+        'daily_earning',
+        'last_earning_date',
+        'referral_bonus',
+        'extra_coins',
         'user_id',
     ];
 

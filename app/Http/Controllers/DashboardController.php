@@ -40,7 +40,7 @@ class DashboardController extends Controller
         if ($user->last_viewed_date != $today) {
             $take = $user->work_limit;
 
-            $getWorks = Work::select('id')->where('visited', false)->latest()->take($take)->get();
+            $getWorks = Work::select('id')->latest()->take($take)->get();
 
             // Prepare the data for bulk insert
             $assignWorkData = [];
@@ -154,9 +154,18 @@ class DashboardController extends Controller
 
     public function wallet(User $user)
     {
-        $amount = $this->getAmount($user);
+        [$amount, $referralAmount, $totalAmount] = $this->getAmount($user);
 
-        return view('wallet', compact('user', 'amount'));
+        return view('wallet', compact('user', 'amount', 'referralAmount', 'totalAmount'));
+    }
+
+    public function extraCoinConvert(User $user)
+    {
+        $user->wallet->amount += $user->wallet->extra_coins;
+        $user->wallet->extra_coins = 0;
+        $user->wallet->save();
+
+        return redirect()->back()->with('success', 'Extra coins convert into PKR successfully');
     }
 
     public function requestForWithdraw(Request $request, User $user)
@@ -186,7 +195,10 @@ class DashboardController extends Controller
         $settings = Setting::first();
 
         $amount = $settings->per_coin_price * $user?->wallet?->amount;
+        $referralAmount = $user?->wallet?->referral_bonus;
 
-        return $amount;
+        $totalAmount = $amount  + $referralAmount;
+
+        return [$amount, $referralAmount, $totalAmount];
     }
 }

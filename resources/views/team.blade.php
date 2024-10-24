@@ -116,9 +116,18 @@
                             <p class="text-gray-700">Email: {{ $member->inviteeUser->email }}</p>
                             <p class="text-gray-700">Joined on: {{ $member->created_at->format('M d, Y') }}</p>
                         </div>
-                        <span class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $member->status == 'active' ? 'bg-green-500' : 'bg-gray-400' }}">
-                            {{ $member->status }}
-                        </span>
+                        <div>
+                            <p>Initial Deposit</p>
+                            <span class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $member->inviteeUser->initial_deposit == 'yes' ? 'bg-green-500' : 'bg-gray-400' }}">
+                                {{ $member->inviteeUser->initial_deposit }}
+                            </span>
+                        </div>
+                        <div>
+                            <p>Deposit Vairfy</p>
+                            <span class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $member->inviteeUser->verified_deposit == 'verified' ? 'bg-green-500' : 'bg-gray-400' }}">
+                                {{ $member->inviteeUser->verified_deposit }}
+                            </span>
+                        </div>
                     </div>
                 @endforeach
             </div>

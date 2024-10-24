@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\{User, Setting};
+use App\Models\{User, Setting, Work, Wallet};
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // $users =  User::factory(20)->create();
+        Work::factory(100)->create();
+
+        // Assign one wallet to each user
+        // $users->each(function ($user) {
+        //     Wallet::factory()->create([
+        //         'user_id' => $user->id, // Ensure each user gets a wallet
+        //     ]);
+        // });
 
         User::create([
             'name' => 'Admin',

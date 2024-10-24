@@ -16,8 +16,9 @@
         <!-- Wallet Balance Section -->
         <div class="mt-6 mx-3">
             <h2 class="text-2xl font-bold mb-4">Wallet</h2>
-            <p class="bg-yellow-500 text-white p-4 rounded-lg my-4">You can withdraw once amount in PKR is more then 200 rupees</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-center">
+            <p class="bg-yellow-500 text-white p-4 rounded-lg my-4">You can withdraw once amount in PKR is more then 200
+                rupees</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 text-center">
                 <div class="bg-white border rounded-lg p-6 shadow-md">
                     <h2 class="text-2xl font-bold mb-4 capitalize">Earning</h2>
                     <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->amount }} Coins</p>
@@ -30,9 +31,24 @@
 
                 <div class="bg-white border rounded-lg p-6 shadow-md">
                     <h2 class="text-2xl font-bold mb-4 capitalize">Earning in PKR</h2>
-                    <p class="text-gray-800 text-3xl font-semibold mb-6">Rs {{ $amount }}</p>
+                    <p class="text-gray-800 text-3xl font-semibold mb-6">Rs {{ $amount }} + {{ $referralAmount ?? 0 }}
+                        = {{ $totalAmount }}</p>
                     <small class="text-gray-500">This price is after converting into PKR. 1 coin price is 0.2 PKR</small>
                 </div>
+
+                <div class="bg-white border rounded-lg p-6 shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 capitalize">Extra Coins</h2>
+                    <p class="text-gray-800 text-3xl font-semibold mb-6">Rs {{ $user?->wallet?->extra_coins ?? 0 }}</p>
+                    @if ($user?->level >= 2)
+                        <a href="{{route('extra.coins.convert', ['user'=>$user->id])}}"
+                            class="px-2 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
+                            Convert
+                        </a>
+                    @else
+                        <small class="text-gray-500">You can withdraw this at level 2.</small>
+                    @endif
+                </div>
+
             </div>
             @if ($user->verified_deposit == 'verified')
                 <div class="text-end my-3">
@@ -95,12 +111,12 @@
                                     (Coins)</label>
                                 <input type="number" name="amount" id="amount" placeholder="Enter amount"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    required @if ($amount < 200) disabled @endif>
+                                    required @if ($totalAmount < 200) disabled @endif>
                             </div>
-                            <p>PKR {{ $amount }}</p>
+                            <p>PKR {{ $totalAmount }}</p>
                             <!-- Submit Button -->
                             <div class="flex justify-end">
-                                @if ($amount >= 200)
+                                @if ($totalAmount >= 200)
                                     <button type="submit"
                                         class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
                                         Submit Request
