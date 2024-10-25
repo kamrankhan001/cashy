@@ -74,375 +74,72 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10 mx-3">
-            <!-- Level 2 Card -->
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-green-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
+            @foreach ($levels as $level)
+                @if ($loop->index === 0)
+                    @continue
+                @endif
+
+                @php
+                    // Determine the color based on the level index, skipping the first level
+                    $colorClass = '';
+                    $adjustedIndex = $loop->index - 1; // Adjust the index to start from Level 2
+
+                    if ($adjustedIndex < 3) {
+                        $colorClass = 'text-green-500'; // First 3 levels (Green) (Level 2, 3, 4)
+                    } elseif ($adjustedIndex < 6) {
+                        $colorClass = 'text-blue-500'; // Next 3 levels (Blue) (Level 5, 6, 7)
+                    } else {
+                        $colorClass = 'text-yellow-500'; // Last 3 levels (Yellow) (Level 8, 9, 10)
+                    }
+                @endphp
+
+                <!-- Level Card -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
+                    <div class="flex items-center justify-center w-16 h-16 {{ $colorClass }} rounded-full">
+                        <!-- Heroicon for Coins -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-8 h-8 {{ $colorClass }}">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold">Level {{ $level->level_number }}</h3>
+                    <p class="text-gray-600 text-center">When {{ $level->members }} members join through your link, your
+                        level moves to Level {{ $level->level_number }}.</p>
+
+                    <!-- List with icons -->
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-5 h-5 {{ $colorClass }} mr-2"> <!-- Removed colorClass -->
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                            </svg>
+                            <span class="{{ $colorClass }} text-lg font-semibold">Task Income
+                                {{ $level->task_income }}</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-5 h-5 {{ $colorClass }} mr-2"> <!-- Removed colorClass -->
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                            </svg>
+                            <span class="{{ $colorClass }} text-lg font-semibold">Referral Bonus
+                                {{ $level->referral_bonus }} PKR</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-5 h-5 {{ $colorClass }} mr-2"> <!-- Removed colorClass -->
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                            </svg>
+                            <span class="{{ $colorClass }} text-lg font-semibold">Extra Coins {{ $level->extra_coins }}
+                                Coins</span>
+                        </li>
+                    </ul>
                 </div>
-                <h3 class="text-xl font-bold">Level 2</h3>
-                <p class="text-gray-600 text-center">When 4 members join through your link, your level moves to Level 2.</p>
+            @endforeach
 
-                <!-- List with icons -->
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Task Income 35</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Referral Bonus 150 PKR</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Extra Coins 40 Coins</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-green-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 3</h3>
-                <p class="text-gray-600 text-center">When 20 members join through your link, your level moves to Level 3.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Task Income 45</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Extra Coins 60</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-green-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 4</h3>
-                <p class="text-gray-600 text-center">When 40 members join through your link, your level moves to Level 4.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Task Income 60</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-green-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-green-600 text-lg font-semibold">Extra Coins 80</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-blue-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 5</h3>
-                <p class="text-gray-600 text-center">When 100 members join through your link, your level moves to Level 5.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Task Income 80</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Extra Coins 100</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-blue-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 6</h3>
-                <p class="text-gray-600 text-center">When 180 members join through your link, your level moves to Level 6.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Task Income 120</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Extra Coins 100</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-blue-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 7</h3>
-                <p class="text-gray-600 text-center">When 280 members join through your link, your level moves to Level 7.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Task Income 200</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-blue-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-blue-600 text-lg font-semibold">Extra Coins 100</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-yellow-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 8</h3>
-                <p class="text-gray-600 text-center">When 400 members join through your link, your level moves to Level 8.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Task Income 300</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Extra Coins 100</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-yellow-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 9</h3>
-                <p class="text-gray-600 text-center">When 450 members join through your link, your level moves to Level 9.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Task Income 400</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Extra Coins 100</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center space-y-4">
-                <div class="flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full">
-                    <!-- Heroicon for Coins -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-8 h-8 text-yellow-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-6l-9 9m0 0l-3-3m3 3v1.5A9 9 0 0012 3V1.5A9 9 0 0112 21v-1.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold">Level 10</h3>
-                <p class="text-gray-600 text-center">When 500 members join through your link, your level moves to Level 10.
-                </p>
-
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Task Income 500</span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Bonus 150 Rs </span>
-                    </li>
-                    <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-yellow-500 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
-                        <span class="text-yellow-600 text-lg font-semibold">Extra Coins 100</span>
-                    </li>
-                </ul>
-            </div>
 
         </div>
 

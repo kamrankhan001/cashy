@@ -15,6 +15,5 @@ class Setting extends Model
         'easy_asa_account_title',
         'easy_asa_account_number',
         'per_coin_price',
-        'job_per_coin',
     ];
 }

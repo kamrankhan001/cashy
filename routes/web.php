@@ -90,4 +90,5 @@ Route::prefix('admin')
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings');
         Route::post('settings/{setting}/update-accounts', [AdminSettingController::class, 'updateAccountInfo'])->name('update-accounts');
         Route::post('settings/{setting}/update-coins', [AdminSettingController::class, 'updateCoinSettings'])->name('update-coins');
+        Route::post('/levels/update', [AdminSettingController::class, 'levelsUpdate'])->name('levels.update');
     });

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreDepositRequest;
 use App\Services\DepositService;
 use Carbon\Carbon;
-use App\Models\{User, Account, Payment, Wallet, WithdrawRequest, Setting, Work, Reference, AssignWork};
+use App\Models\{User, WithdrawRequest, Setting, Work, Level, AssignWork};
 
 class DashboardController extends Controller
 {
@@ -77,20 +77,8 @@ class DashboardController extends Controller
         $user->works()->updateExistingPivot($work->id, ['isVisited' => true]);
 
         // Add coins to user's wallet
-        // $coinPrWork = Setting::select('job_per_coin')->first()->job_per_coin;
 
-        $coinPrWork = [
-            1 => 25,
-            2 => 35,
-            3 => 45,
-            4 => 60,
-            5 => 80,
-            6 => 120,
-            7 => 200,
-            8 => 300,
-            9 => 400,
-            10 => 500,
-        ];
+        $coinPrWork = Level::pluck('task_income', 'level_number')->toArray();
 
         // Update wallet amount
         $user->wallet->amount += $coinPrWork[$user->level];
@@ -187,7 +175,9 @@ class DashboardController extends Controller
 
     public function team(User $user)
     {
-        return view('team', compact('user'));
+        $levels = Level::all();
+
+        return view('team', compact('user', 'levels'));
     }
 
     protected function getAmount($user)

@@ -5,8 +5,7 @@ namespace App\Services;
 use App\Models\Account;
 use App\Models\Payment;
 use App\Models\Reference;
-use App\Models\User;
-use App\Models\Wallet;
+use App\Models\{User,Level,Wallet};
 
 class DepositService
 {
@@ -58,10 +57,11 @@ class DepositService
 
         if ($reference) {
             $inviter = User::find($reference->inviter);
+            $referralBonus = Level::select('referral_bonus')->where('level_number', $inviter->level)->first();
 
             if ($inviter && $inviter->wallet) {
                 // Add referral bonus to inviter's wallet
-                $inviter->wallet->referral_bonus += 150;
+                $inviter->wallet->referral_bonus += $referralBonus->referral_bonus;
                 $this->addExtraCoins($inviter);
                 $inviter->wallet->save();
 
@@ -73,18 +73,7 @@ class DepositService
 
     public function addExtraCoins($inviter)
     {
-        $extraCoins = [
-            1 => 25,
-            2 => 40,
-            3 => 60,
-            4 => 80,
-            5 => 100,
-            6 => 100,
-            7 => 100,
-            8 => 100,
-            9 => 100,
-            10 => 100,
-        ];
+        $extraCoins = Level::pluck('extra_coins', 'level_number')->toArray();
 
         $inviter->wallet->extra_coins += $extraCoins[$inviter->level];
     }
@@ -93,17 +82,19 @@ class DepositService
     {
         $totalReferences = Reference::where('inviter', $inviter->id)->count();
 
+        $members = Level::pluck('members')->toArray();
+
         // Update inviter's level and work limit based on the number of invitees
         $levelLimits = [
-            4 => [2, 10],
-            20 => [3, 15],
-            40 => [4, 20],
-            100 => [5, 25],
-            180 => [6, 30],
-            280 => [7, 35],
-            400 => [8, 40],
-            450 => [9, 45],
-            500 => [10, 50],
+            $members[1] => [2, 10],
+            $members[2] => [3, 15],
+            $members[3] => [4, 20],
+            $members[4] => [5, 25],
+            $members[5] => [6, 30],
+            $members[6] => [7, 35],
+            $members[7] => [8, 40],
+            $members[8] => [9, 45],
+            $members[9] => [10, 50],
         ];
 
 
