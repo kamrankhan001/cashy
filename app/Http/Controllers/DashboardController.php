@@ -192,8 +192,19 @@ class DashboardController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
-        $user->wallet->amount = $user->wallet->amount - $request->amount;
-        $user->wallet->save();
+
+        $coinPrice = Setting::first()->per_coin_price;
+
+        if(($user?->wallet?->amount * $coinPrice) < $request->amount){
+            return redirect()->back()->with('warning', 'Please enter valid amount');
+        }
+
+        if(($user->wallet->amount * $coinPrice) >= 200){
+            $user->wallet->amount = $user->wallet->amount - ($request->amount / $coinPrice);
+            $user->wallet->save();
+        }else{
+            return redirect()->back()->with('warning', 'Your have insufficient balance');
+        }
 
         return redirect()->back()->with('success', 'your request submitted successfully');
     }

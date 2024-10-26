@@ -7,6 +7,11 @@
     @include('include.header')
 
     <div class="max-w-screen-lg mx-auto mb-28">
+        @if (session('warning'))
+            <div class="bg-yellow-200 p-4 rounded-lg my-4">
+                {{ session('warning') }}
+            </div>
+        @endif
         @if (session('success'))
             <div class="bg-green-500 text-white p-4 rounded-lg my-4">
                 {{ session('success') }}
@@ -38,8 +43,8 @@
 
                 <div class="bg-white border rounded-lg p-6 shadow-md">
                     <h2 class="text-2xl font-bold mb-4 capitalize">Extra Coins</h2>
-                    <p class="text-gray-800 text-3xl font-semibold mb-6">Rs {{ $user?->wallet?->extra_coins ?? 0 }}</p>
-                    @if ($user?->level >= 2)
+                    <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->extra_coins ?? 0 }}</p>
+                    @if ($user?->level >= 2 && $user?->wallet?->extra_coins > 0)
                         <a href="{{route('extra.coins.convert', ['user'=>$user->id])}}"
                             class="px-2 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
                             Convert

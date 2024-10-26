@@ -45,7 +45,7 @@
                                 {{ $withDrawRequest->user->name }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $withDrawRequest->amount }}
+                                {{ $withDrawRequest->amount }} {{$withDrawRequest->amount ? "Rs" : ""}}
                             </td>
                             <td class="px-6 py-4">
                                 <span
