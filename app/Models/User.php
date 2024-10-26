@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'email', 'password', 'country', 'city', 'address', 'is_admin', 'initial_deposit', 'verified_deposit', 'ref_link'];
+    protected $fillable = ['name', 'email', 'password', 'country', 'city', 'address', 'is_admin', 'initial_deposit', 'verified_deposit', 'level', 'work_limit', 'original_work_limit', 'last_viewed_date', 'ref_link', 'last_ref_date'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -72,7 +72,7 @@ class User extends Authenticatable
     public function works()
     {
         return $this->belongsToMany(Work::class, 'assign_works')
-            ->withPivot('isVisited')  // Include pivot table data
-            ->withTimestamps();  // Capture created_at and updated_at
+            ->withPivot('isVisited') // Include pivot table data
+            ->withTimestamps(); // Capture created_at and updated_at
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreDepositRequest;
 use App\Services\DepositService;
 use Carbon\Carbon;
-use App\Models\{User, WithdrawRequest, Setting, Work, Level, AssignWork};
+use App\Models\{User, WithdrawRequest, Setting, Work, Level, AssignWork, Reference};
 
 class DashboardController extends Controller
 {
@@ -30,7 +30,6 @@ class DashboardController extends Controller
         return redirect()->route('dashboard')->with('success', 'Your deposit information has been submitted successfully.');
     }
 
-
     public function work(User $user)
     {
         // Get today's date
@@ -38,7 +37,33 @@ class DashboardController extends Controller
 
         // If the last viewed date is not today, reset the daily work count
         if ($user->last_viewed_date != $today) {
-            $take = $user->work_limit;
+            $initialRefsCount = Reference::where('inviter', $user->id)
+                ->whereDate('created_at', $today)
+                ->count();
+
+            // Check if no referral was made today by comparing last referral date
+            if ($initialRefsCount === 0 && $user->last_ref_date != $today) {
+                // Reduce the work limit by 1 if no referral was made today
+                $user->work_limit = max(0, $user->work_limit - 1); // Avoid negative work_limit
+            } elseif ($initialRefsCount > 0) {
+                $levelLimits = [
+                    1 => 5,
+                    2 => 10,
+                    3 => 15,
+                    4 => 20,
+                    5 => 25,
+                    6 => 30,
+                    7 => 35,
+                    8 => 40,
+                    9 => 45,
+                    10 => 50,
+                ];
+                // Reset the work limit if a referral was made today
+                $user->work_limit = $levelLimits[$user->level]; // Set this to the initial work limit
+                $user->last_ref_date = $today;
+            }
+
+            $take = $user->work_limit + 1;
 
             $getWorks = Work::select('id')->latest()->take($take)->get();
 
@@ -187,7 +212,7 @@ class DashboardController extends Controller
         $amount = $settings->per_coin_price * $user?->wallet?->amount;
         $referralAmount = $user?->wallet?->referral_bonus;
 
-        $totalAmount = $amount  + $referralAmount;
+        $totalAmount = $amount + $referralAmount;
 
         return [$amount, $referralAmount, $totalAmount];
     }

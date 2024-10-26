@@ -39,7 +39,6 @@ class DatabaseSeeder extends Seeder
             'easy_asa_account_title' => 'Admin',
             'easy_asa_account_number' => '0300 0011011',
             'per_coin_price' => '0.2',
-            'job_per_coin' => '20',
         ]);
 
         $settings = Setting::first(); // Get the first setting (assuming only one exists)
