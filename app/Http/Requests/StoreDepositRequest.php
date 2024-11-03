@@ -25,8 +25,8 @@ class StoreDepositRequest extends FormRequest
             'bank_name' => 'required|string|max:255',
             'account_name' => 'required|string|max:255',
             'account_number' => 'required|string|max:255',
-            'amount' => 'required|numeric',
-            'deposit_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Limit to 2MB
+            // 'amount' => 'required|numeric',
+            // 'deposit_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Limit to 2MB
         ];
     }
 }

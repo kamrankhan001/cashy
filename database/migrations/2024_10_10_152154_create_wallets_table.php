@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('last_earning_date')->nullable();
             $table->integer('referral_bonus')->nullable();
             $table->integer('extra_coins')->nullable();
+            $table->integer('pkr')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

@@ -33,6 +33,11 @@ class AdminUserController extends Controller
         return view('admin.users.show', compact('user'));
     }
 
+    public function userAccountEdit(User $user)
+    {
+        return view('admin.users.edit-user', compact('user'));
+    }
+
     public function updateDepositStatus(Request $request, User $user)
     {
         $user->verified_deposit = $request->verified_deposit;

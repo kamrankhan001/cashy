@@ -39,6 +39,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function firstDeposit()
+    {
+        return $this->hasOne(FirstDeposit::class);
+    }
+
     public function account()
     {
         return $this->hasOne(Account::class);

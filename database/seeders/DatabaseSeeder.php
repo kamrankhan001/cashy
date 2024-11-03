@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             'city' => 'London',
             'address' => 'some address here',
             'password' => '12345678',
+            'verified_deposit' => 'verified',
             'is_admin' => true,
         ]);
 

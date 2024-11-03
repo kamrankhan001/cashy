@@ -69,21 +69,42 @@
             </div>
         </div>
 
-        <!-- Account Details Section -->
         <div class="bg-white p-6 shadow-lg rounded-lg mb-6">
             <h3 class="text-xl font-semibold mb-4">Account Details</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Account Title:</label>
-                    <p class="text-gray-600">{{ $user?->account?->account_name }}</p>
-                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Bank Name:</label>
                     <p class="text-gray-600">{{ $user?->account?->bank_name }}</p>
                 </div>
                 <div>
+                    <label class="block text-sm font-medium text-gray-700">Account Name:</label>
+                    <p class="text-gray-600">{{ $user?->account?->account_name }}</p>
+                </div>
+                <div>
                     <label class="block text-sm font-medium text-gray-700">Account Number:</label>
                     <p class="text-gray-600">{{ $user?->account?->account_number }}</p>
+                </div>
+            </div>
+            <div class="text-end">
+                <a href="{{route('admin.users.edit', ['user'=>$user->id])}}" class="text-indigo-600 hover:underline">Edit</a>
+            </div>
+        </div>
+
+        <!-- Deposit Section -->
+        <div class="bg-white p-6 shadow-lg rounded-lg mb-6">
+            <h3 class="text-xl font-semibold mb-4">Deposit Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Sender Name:</label>
+                    <p class="text-gray-600">{{ $user?->firstDeposit?->sender_name }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Trx Id:</label>
+                    <p class="text-gray-600">{{ $user?->firstDeposit?->trx_id }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Account Number:</label>
+                    <p class="text-gray-600">{{ $user?->firstDeposit?->sender_account }}</p>
                 </div>
             </div>
         </div>
@@ -92,7 +113,7 @@
         <div class="bg-white p-6 shadow-lg rounded-lg mb-6">
             <h3 class="text-xl font-semibold mb-4">Initial Deposit Verification</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="flex gap-1 items-center">
+                {{-- <div class="flex gap-1 items-center">
                     <label class="block text-sm font-medium text-gray-700">Deposit Amount</label>
                     <span class="px-4 py-2 rounded-full">
                         @if ($user?->payments[0] ?? false)
@@ -113,7 +134,7 @@
                             no image
                         </span>
                     @endif
-                </div>
+                </div> --}}
                 <div class="flex gap-1 items-center">
                     <label class="block text-sm font-medium text-gray-700">Initial Deposit Status:</label>
                     <span

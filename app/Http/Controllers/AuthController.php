@@ -94,7 +94,7 @@ class AuthController extends Controller
         //defer(fn() => Mail::to($validatedData['email'])->send(new RegisterConfirmMail()));
 
         // Redirect to a desired page, such as the dashboard
-        return redirect()->route('initial.deposit');
+        return redirect()->route('term.condition');
     }
 
     public function logout(Request $request)

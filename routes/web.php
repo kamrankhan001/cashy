@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{AuthController, DashboardController};
 use App\Http\Controllers\Admin\{AdminDashboardController, AdminUserController, AdminWorkController, AdminSettingController, AdminWithDrawController};
 
-
-Route::get('clear-all', function() {
+Route::get('clear-all', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     Artisan::call('view:clear');
@@ -15,7 +14,7 @@ Route::get('clear-all', function() {
     return 'Application cache, config, view, and route caches cleared successfully';
 });
 
-Route::get('create-link-storage', function(){
+Route::get('create-link-storage', function () {
     Artisan::call('storage:link');
     return 'storage linked successfully';
 });
@@ -31,34 +30,43 @@ Route::post('/login', [AuthController::class, 'check'])->name('check.login');
 Route::middleware('auth')->group(function () {
     Route::get('/confirm-registration', [AuthController::class, 'confirmRegistration'])->name('confirm.registration');
 
+    Route::get('/term-and-condition', [DashboardController::class, 'termAdnCondition'])->name('term.condition');
+
     Route::get('/initial-deposit', [DashboardController::class, 'initialDeposit'])->name('initial.deposit');
 
     Route::post('/initial-deposit', [DashboardController::class, 'storeDeposit'])->name('store.deposit');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // Work
-    Route::get('/work/{user}', [DashboardController::class, 'work'])->name('work');
-    Route::put('/work/{user}/track/{work}', [DashboardController::class, 'trackAndRedirect'])->name('work.track');
-
-    // Team
-    Route::get('/team/{user}', [DashboardController::class, 'team'])->name('team');
-
-    // Settings
-    Route::get('/settings', [AuthController::class, 'settings'])->name('settings');
-
-    // Password Update
-    Route::post('/update/password', [AuthController::class, 'passwordUpdate'])->name('password.update');
-
-    // Profile
-    Route::get('/profile/{user}', [DashboardController::class, 'profile'])->name('profile');
-    Route::put('/profile/{user}/update', [DashboardController::class, 'profileUpdate'])->name('account.update');
+    Route::get('/after-deposit', [DashboardController::class, 'afterDeposit'])->name('after.deposit');
 
 
-    // Wallet
-    Route::get('/wallet/{user}', [DashboardController::class, 'wallet'])->name('wallet');
-    Route::get('/wallet/{user}/extra/coins/convert', [DashboardController::class, 'extraCoinConvert'])->name('extra.coins.convert');
-    Route::post('/request/for/withdraw/{user}', [DashboardController::class, 'requestForWithdraw'])->name('request.withdraw');
+    Route::middleware('verify')->group(function () {
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Work
+        Route::get('/work/{user}', [DashboardController::class, 'work'])->name('work');
+        Route::put('/work/{user}/track/{work}', [DashboardController::class, 'trackAndRedirect'])->name('work.track');
+
+        // Team
+        Route::get('/team/{user}', [DashboardController::class, 'team'])->name('team');
+
+        // Settings
+        Route::get('/settings', [AuthController::class, 'settings'])->name('settings');
+
+        // Password Update
+        Route::post('/update/password', [AuthController::class, 'passwordUpdate'])->name('password.update');
+
+        // Profile
+        Route::get('/profile/{user}', [DashboardController::class, 'profile'])->name('profile');
+        Route::put('/profile/{user}/update/{withdraw?}', [DashboardController::class, 'profileUpdate'])->name('account.update');
+
+        // Wallet
+        Route::get('/wallet/{user}', [DashboardController::class, 'wallet'])->name('wallet');
+        // Route::get('/wallet/{user}/extra/coins/convert', [DashboardController::class, 'extraCoinConvert'])->name('extra.coins.convert');
+        // Route::post('/request/for/withdraw/{user}', [DashboardController::class, 'requestForWithdraw'])->name('request.withdraw');
+        Route::get('/convert/{user}/to/{isExtraCoins}/pkr', [DashboardController::class, 'convertToPKR'])->name('convert.to.pkr');
+        Route::get('/withdraw/{user}/request', [DashboardController::class, 'requestForWithdraw'])->name('withdraw.request');
+
+    });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
@@ -72,6 +80,7 @@ Route::prefix('admin')
         // Users
         Route::get('/users', [AdminUserController::class, 'index'])->name('users');
         Route::get('/users/{user}/view', [AdminUserController::class, 'view'])->name('users.view');
+        Route::get('/users/{user}/edit', [AdminUserController::class, 'userAccountEdit'])->name('users.edit');
         Route::put('/users/{user}/update/deposit/status', [AdminUserController::class, 'updateDepositStatus'])->name('users.updateDepositStatus');
 
         // Add Work
@@ -84,7 +93,6 @@ Route::prefix('admin')
         Route::get('/withdraw/request', [AdminWithDrawController::class, 'index'])->name('withdraw');
         Route::get('/withdraw/request/{withDrawRequest}', [AdminWithDrawController::class, 'userDetails'])->name('withdraw.user');
         Route::put('/withdraw/request/{withDrawRequest}', [AdminWithDrawController::class, 'requestUpdate'])->name('withdraw.request.update');
-
 
         // Setting
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings');

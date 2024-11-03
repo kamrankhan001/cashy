@@ -70,11 +70,6 @@
                     <label class="block text-sm font-medium text-gray-700">Account Name:</label>
                     <p class="text-gray-800">{{ $withdrawRequest?->user?->account?->account_name }}</p>
                 </div>
-                <!-- Bank Name -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Bank Name:</label>
-                    <p class="text-gray-800">{{ $withdrawRequest?->user?->account?->bank_name }}</p>
-                </div>
                 <!-- Account Title -->
                 <div class="col-span-2">
                     <label class="block text-sm font-medium text-gray-700">Account Number:</label>

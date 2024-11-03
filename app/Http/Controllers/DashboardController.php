@@ -6,13 +6,18 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreDepositRequest;
 use App\Services\DepositService;
 use Carbon\Carbon;
-use App\Models\{User, WithdrawRequest, Setting, Work, Level, AssignWork, Reference};
+use App\Models\{User, WithdrawRequest, Setting, Work, Level, AssignWork, Reference, Wallet};
 
 class DashboardController extends Controller
 {
     public function index()
     {
         return view('dashboard');
+    }
+
+    public function termAdnCondition()
+    {
+        return view('before-deposit');
     }
 
     public function initialDeposit()
@@ -28,6 +33,11 @@ class DashboardController extends Controller
 
         // Redirect to dashboard with a success message
         return redirect()->route('dashboard')->with('success', 'Your deposit information has been submitted successfully.');
+    }
+
+    public function afterDeposit()
+    {
+        return view('after-deposit');
     }
 
     public function work(User $user)
@@ -105,22 +115,27 @@ class DashboardController extends Controller
 
         $coinPrWork = Level::pluck('task_income', 'level_number')->toArray();
 
-        // Update wallet amount
-        $user->wallet->amount += $coinPrWork[$user->level];
-
-        // Get today's date
-        $today = now()->format('Y-m-d');
-
-        // Check if daily earning needs to be reset
-        if ($user->wallet->last_earning_date !== $today) {
-            $user->wallet->daily_earning = $coinPrWork[$user->level]; // Set to current earning for today
-            $user->wallet->last_earning_date = $today; // Update last earning date
+        // Update or create the wallet
+        if ($user->wallet) {
+            $user->wallet->amount += $coinPrWork[$user->level];
+            $user->wallet->save();
         } else {
-            $user->wallet->daily_earning += $coinPrWork[$user->level]; // Increment daily earning
+            Wallet::create([
+                'amount' => $coinPrWork[$user->level],
+                'user_id' => $user->id,
+            ]);
         }
 
-        // Save wallet updates
-        $user->wallet->save();
+        // Get today's date
+        // $today = now()->format('Y-m-d');
+
+        // // Check if daily earning needs to be reset
+        // if ($user->wallet->last_earning_date !== $today) {
+        //     $user->wallet->daily_earning = $coinPrWork[$user->level]; // Set to current earning for today
+        //     $user->wallet->last_earning_date = $today; // Update last earning date
+        // } else {
+        //     $user->wallet->daily_earning += $coinPrWork[$user->level]; // Increment daily earning
+        // }
 
         // Return JSON with the redirect URL
         return response()->json(
@@ -137,7 +152,7 @@ class DashboardController extends Controller
         return view('profile', compact('user'));
     }
 
-    public function profileUpdate(Request $request, User $user)
+    public function profileUpdate(Request $request, User $user, int $withdraw = 0)
     {
         // Validate the incoming request data
         $request->validate([
@@ -160,51 +175,82 @@ class DashboardController extends Controller
             ]);
         }
 
-        return redirect()
-            ->route('profile', ['user' => $user->id])
-            ->with('success', 'Your account information updated successfully.');
+        if($withdraw){
+            return redirect()->back()->with('success', 'Your account information saved. you can withdraw now.');
+        }
+
+        return redirect()->back()->with('success', 'Account information updated successfully.');
     }
 
     public function wallet(User $user)
     {
-        [$amount, $referralAmount, $totalAmount] = $this->getAmount($user);
+        // [$amount, $referralAmount, $totalAmount] = $this->getAmount($user);
 
-        return view('wallet', compact('user', 'amount', 'referralAmount', 'totalAmount'));
+        return view('wallet', compact('user'));
     }
 
-    public function extraCoinConvert(User $user)
+    public function convertToPKR(User $user, int $isExtraCoins)
     {
-        $user->wallet->amount += $user->wallet->extra_coins;
-        $user->wallet->extra_coins = 0;
+        $settings = Setting::first();
+
+        if ($isExtraCoins) {
+            $amount = $settings->per_coin_price * $user?->wallet?->extra_coins;
+            $user->wallet->extra_coins = 0;
+        } else {
+            $amount = $settings->per_coin_price * $user?->wallet?->amount;
+            $user->wallet->amount = 0;
+        }
+
+        $user->wallet->pkr += $amount;
+
         $user->wallet->save();
 
-        return redirect()->back()->with('success', 'Extra coins convert into PKR successfully');
+        return redirect()->back()->with('success', 'Convert into PKR successfully');
     }
 
-    public function requestForWithdraw(Request $request, User $user)
+    // public function extraCoinConvert(User $user)
+    // {
+    //     $user->wallet->amount += $user->wallet->extra_coins;
+    //     $user->wallet->extra_coins = 0;
+    //     $user->wallet->save();
+
+    //     return redirect()->back()->with('success', 'Extra coins convert into PKR successfully');
+    // }
+
+    public function requestForWithdraw(User $user)
     {
-        $request->validate([
-            'amount' => 'required|numeric|min:0',
-        ]);
+        // $request->validate([
+        //     'amount' => 'required|numeric|min:0',
+        // ]);
+
+        // $coinPrice = Setting::first()->per_coin_price;
+
+        // if ($user?->wallet?->amount * $coinPrice < $request->amount) {
+        //     return redirect()->back()->with('warning', 'Please enter valid amount');
+        // }
+
+        if($user->wallet->pkr < 200){
+            return redirect()->back()->with('warning', 'Your have insufficient balance');
+        }
+
+        if(!$user->account){
+            return redirect()->route('profile', ['user'=>$user])->with('success', 'Please provide the bank information');
+        }
 
         WithdrawRequest::create([
-            'amount' => $request->amount,
+            'amount' => $user->wallet->pkr,
             'user_id' => auth()->user()->id,
         ]);
 
+        $user->wallet->pkr = 0;
+        $user->wallet->save();
 
-        $coinPrice = Setting::first()->per_coin_price;
-
-        if(($user?->wallet?->amount * $coinPrice) < $request->amount){
-            return redirect()->back()->with('warning', 'Please enter valid amount');
-        }
-
-        if(($user->wallet->amount * $coinPrice) >= 200){
-            $user->wallet->amount = $user->wallet->amount - ($request->amount / $coinPrice);
-            $user->wallet->save();
-        }else{
-            return redirect()->back()->with('warning', 'Your have insufficient balance');
-        }
+        // if ($user->wallet->amount * $coinPrice >= 200) {
+        //     $user->wallet->amount = $user->wallet->amount - $request->amount / $coinPrice;
+        //     $user->wallet->save();
+        // } else {
+        //     return redirect()->back()->with('warning', 'Your have insufficient balance');
+        // }
 
         return redirect()->back()->with('success', 'your request submitted successfully');
     }
@@ -214,17 +260,5 @@ class DashboardController extends Controller
         $levels = Level::all();
 
         return view('team', compact('user', 'levels'));
-    }
-
-    protected function getAmount($user)
-    {
-        $settings = Setting::first();
-
-        $amount = $settings->per_coin_price * $user?->wallet?->amount;
-        $referralAmount = $user?->wallet?->referral_bonus;
-
-        $totalAmount = $amount + $referralAmount;
-
-        return [$amount, $referralAmount, $totalAmount];
     }
 }

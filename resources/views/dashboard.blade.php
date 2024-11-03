@@ -16,7 +16,7 @@
             <!-- Card Section -->
             <section class="flex justify-center mt-6">
                 <div class="w-96 bg-gradient-to-r from-green-400 to-indigo-500 text-white p-4 rounded-lg shadow-lg">
-                    <div class="text-2xl font-semibold">{{auth()->user()?->account->account_number}}</div>
+                    <div class="text-2xl font-semibold">{{auth()->user()?->account?->account_number ?? 'Account number'}}</div>
                     <div class="flex my-3 gap-1 items-center justify-between">
                         <h3>CARD HOLDER</h3>
                         <h4>{{auth()->user()->name}}</h4>
