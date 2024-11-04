@@ -10,16 +10,16 @@
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Welcome to Cashy</h2>
             <p class="text-center text-gray-600">To join Cashy, you have to pay a joining fee.</p>
 
-            <h3 class="text-2xl font-bold text-blue-600 my-4">FEE: RS 700</h3>
+            <h3 class="text-2xl font-bold text-blue-600 my-4">FEE: RS 800</h3>
 
             <div class="text-gray-700 space-y-2 text-left">
                 <p class="text-xl font-bold">Cashy provides you with various online earning opportunities:</p>
                 <div class="text-gray-700 space-y-2">
-                    <p>&bull; Cashbep offers different types of tasks for daily earning.</p>
-                    <p>&bull; In Cashbep, you can earn by spending time on different websites.</p>
-                    <p>&bull; Cashbep allows you to withdraw funds to your Easypaisa account easily.</p>
-                    <p>&bull; Earn additional income by referring others to join Cashbep.</p>
-                    <p>&bull; Cashbep has a minimum withdrawal limit of Rs.100, and no referral is required for withdrawal.
+                    <p>&bull; Cashy offers different types of tasks for daily earning.</p>
+                    <p>&bull; In Cashy, you can earn by spending time on different websites.</p>
+                    <p>&bull; Cashy allows you to withdraw funds to your Easypaisa account easily.</p>
+                    <p>&bull; Earn additional income by referring others to join Cashy.</p>
+                    <p>&bull; Cashy has a minimum withdrawal limit of Rs.200, and no referral is required for withdrawal.
                     </p>
                 </div>
 

@@ -63,7 +63,7 @@ class DepositService
                 // $inviter->wallet->referral_bonus += $referralBonus->referral_bonus;
                 $inviter->wallet->amount += ($referralBonus->referral_bonus/$perCoins);
 
-                $this->addExtraCoins($inviter);
+                $this->addExtraCoins($inviter,$perCoins);
                 $inviter->wallet->save();
 
                 // Update inviter's level and work limit based on total references
@@ -72,11 +72,11 @@ class DepositService
         }
     }
 
-    public function addExtraCoins($inviter)
+    public function addExtraCoins($inviter, $perCoins)
     {
         $extraCoins = Level::pluck('extra_coins', 'level_number')->toArray();
 
-        $inviter->wallet->extra_coins += $extraCoins[$inviter->level];
+        $inviter->wallet->extra_coins += ($extraCoins[$inviter->level]/$perCoins);
     }
 
     public function updateInviterLevel($inviter)

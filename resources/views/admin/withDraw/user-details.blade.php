@@ -65,6 +65,11 @@
         <div class="bg-white p-6 rounded-lg shadow-md mt-6">
             <h2 class="text-2xl font-bold mb-4">Bank Account Information</h2>
             <div class="grid grid-cols-2 gap-4">
+                <!-- Bank Name -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Bank Name:</label>
+                    <p class="text-gray-800">{{ $withdrawRequest?->user?->account?->bank_name }}</p>
+                </div>
                 <!-- Account Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Account Name:</label>

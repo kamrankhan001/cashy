@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Mail\RegisterConfirmMail;
 use Illuminate\Support\Facades\Mail;
-use App\Models\{User, Reference};
+use App\Models\{User, Reference, Wallet};
 
 class AuthController extends Controller
 {
@@ -80,6 +80,10 @@ class AuthController extends Controller
 
         $user->ref_link = route('register', ['user' => $user->id]);
         $user->save();
+
+        Wallet::create([
+            'user_id' => $user->id,
+        ]);
 
         if($request->inviter){
             Reference::create([

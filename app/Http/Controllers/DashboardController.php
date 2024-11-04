@@ -47,6 +47,17 @@ class DashboardController extends Controller
 
         // If the last viewed date is not today, reset the daily work count
         if ($user->last_viewed_date != $today) {
+            
+            $inviter = $user->invitedBy?->first();
+            if($inviter){
+                $inviterUser = User::find($inviter->inviter);
+                $fivePercent = ($user->wallet->daily_earning*5)/100; // give 5% to the inviter
+                $inviterUser->wallet->amount += $fivePercent;
+                $inviterUser->wallet->save();
+
+                $user->wallet->amount -= $fivePercent;
+            }
+
             $initialRefsCount = Reference::where('inviter', $user->id)
                 ->whereDate('created_at', $today)
                 ->count();
@@ -112,30 +123,33 @@ class DashboardController extends Controller
         $user->works()->updateExistingPivot($work->id, ['isVisited' => true]);
 
         // Add coins to user's wallet
-
         $coinPrWork = Level::pluck('task_income', 'level_number')->toArray();
+
+        $perCoin = Setting::first()->per_coin_price;
 
         // Update or create the wallet
         if ($user->wallet) {
-            $user->wallet->amount += $coinPrWork[$user->level];
+            $user->wallet->amount += ($coinPrWork[$user->level]/$perCoin);
             $user->wallet->save();
         } else {
             Wallet::create([
-                'amount' => $coinPrWork[$user->level],
+                'amount' => ($coinPrWork[$user->level]/$perCoin),
                 'user_id' => $user->id,
             ]);
         }
 
         // Get today's date
-        // $today = now()->format('Y-m-d');
+        $today = now()->format('Y-m-d');
 
-        // // Check if daily earning needs to be reset
-        // if ($user->wallet->last_earning_date !== $today) {
-        //     $user->wallet->daily_earning = $coinPrWork[$user->level]; // Set to current earning for today
-        //     $user->wallet->last_earning_date = $today; // Update last earning date
-        // } else {
-        //     $user->wallet->daily_earning += $coinPrWork[$user->level]; // Increment daily earning
-        // }
+        // Check if daily earning needs to be reset
+        if ($user->wallet->last_earning_date !== $today) {
+            $user->wallet->daily_earning = ($coinPrWork[$user->level]/$perCoin); // Set to current earning for today
+            $user->wallet->last_earning_date = $today; // Update last earning date
+        } else {
+            $user->wallet->daily_earning += ($coinPrWork[$user->level]/$perCoin); // Increment daily earning
+        }
+
+        $user->wallet->save();
 
         // Return JSON with the redirect URL
         return response()->json(
