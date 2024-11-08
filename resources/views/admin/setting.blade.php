@@ -114,13 +114,23 @@
             <h3 class="text-xl font-semibold mb-4">Coin Settings</h3>
             <form action="{{ route('admin.update-coins', ['setting' => $setting->id]) }}" method="POST" novalidate>
                 @csrf
-                <div class="grid grid-cols-1">
+                <div class="grid grid-cols-1 md:grid-cols-2">
                     <div>
                         <label for="coin_price" class="block text-sm font-medium text-gray-700">Set Coin Price</label>
                         <input type="text" step="0.01" name="coin_price" id="coin_price" placeholder="Coin Price"
                             required value="{{ $setting->per_coin_price }}"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         @error('coin_price')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="extra_coin_price" class="block text-sm font-medium text-gray-700">Set Extra Coin
+                            Price</label>
+                        <input type="text" step="0.01" name="extra_coin_price" id="extra_coin_price"
+                            placeholder="Extra Coin Price" required value="{{ $setting->extra_coin_price }}"
+                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        @error('extra_coin_price')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>

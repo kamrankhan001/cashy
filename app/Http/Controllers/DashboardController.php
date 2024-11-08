@@ -47,7 +47,7 @@ class DashboardController extends Controller
 
         // If the last viewed date is not today, reset the daily work count
         if ($user->last_viewed_date != $today) {
-            
+
             $inviter = $user->invitedBy?->first();
             if($inviter){
                 $inviterUser = User::find($inviter->inviter);
@@ -122,6 +122,19 @@ class DashboardController extends Controller
         // Mark work as visited by the user
         $user->works()->updateExistingPivot($work->id, ['isVisited' => true]);
 
+        $levelLimits = [
+            1 => 5,
+            2 => 10,
+            3 => 15,
+            4 => 20,
+            5 => 25,
+            6 => 30,
+            7 => 35,
+            8 => 40,
+            9 => 45,
+            10 => 50,
+        ];
+
         // Add coins to user's wallet
         $coinPrWork = Level::pluck('task_income', 'level_number')->toArray();
 
@@ -130,10 +143,12 @@ class DashboardController extends Controller
         // Update or create the wallet
         if ($user->wallet) {
             $user->wallet->amount += ($coinPrWork[$user->level]/$perCoin);
+            $user->wallet->pkr += (($coinPrWork[$user->level]/$levelLimits[$user->level]));
             $user->wallet->save();
         } else {
             Wallet::create([
                 'amount' => ($coinPrWork[$user->level]/$perCoin),
+                'pkr' => (($coinPrWork[$user->level]/$levelLimits[$user->level])/$perCoin),
                 'user_id' => $user->id,
             ]);
         }
@@ -198,8 +213,6 @@ class DashboardController extends Controller
 
     public function wallet(User $user)
     {
-        // [$amount, $referralAmount, $totalAmount] = $this->getAmount($user);
-
         return view('wallet', compact('user'));
     }
 
@@ -208,14 +221,13 @@ class DashboardController extends Controller
         $settings = Setting::first();
 
         if ($isExtraCoins) {
-            $amount = $settings->per_coin_price * $user?->wallet?->extra_coins;
+            $user->wallet->convert_to_pkr += $settings->extra_coin_price * $user?->wallet?->extra_coins;
             $user->wallet->extra_coins = 0;
         } else {
-            $amount = $settings->per_coin_price * $user?->wallet?->amount;
+            $user->wallet->convert_to_pkr +=  $user->wallet->pkr;
+            $user->wallet->pkr = 0;
             $user->wallet->amount = 0;
         }
-
-        $user->wallet->pkr += $amount;
 
         $user->wallet->save();
 

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,7 +17,8 @@ return new class extends Migration
             $table->date('last_earning_date')->nullable();
             $table->integer('referral_bonus')->nullable();
             $table->integer('extra_coins')->nullable();
-            $table->integer('pkr')->nullable();
+            $table->decimal('pkr', 15, 2)->nullable();
+            $table->decimal('convert_to_pkr', 15, 2)->default(0)->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

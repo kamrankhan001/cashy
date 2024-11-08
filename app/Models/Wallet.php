@@ -16,6 +16,7 @@ class Wallet extends Model
         'referral_bonus',
         'extra_coins',
         'user_id',
+        'convert_to_pkr'
     ];
 
     public function user()

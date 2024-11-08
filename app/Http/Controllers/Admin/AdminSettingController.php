@@ -43,11 +43,13 @@ class AdminSettingController extends Controller
         // Validate the input
         $request->validate([
             'coin_price' => 'required|numeric|min:0',
+            'extra_coin_price' => 'required|numeric|min:0',
         ]);
 
         // Update the settings in the database
         $setting->update([
             'per_coin_price' => $request->coin_price,
+            'extra_coin_price' => $request->extra_coin_price,
             'updated_at' => now(),
         ]);
 

@@ -55,7 +55,7 @@
 
                 <div class="bg-white border rounded-lg p-6 shadow-md">
                     <h2 class="text-2xl font-bold mb-4 capitalize">Extra Coins</h2>
-                    <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->extra_coins ?? 0 }}</p>
+                    <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->extra_coins * 5 ?? 0 }}</p>
                     @if ($user?->level >= 2)
                         @if ($user?->wallet?->extra_coins > 0)
                             <a href="{{ route('convert.to.pkr', ['user' => $user, 'isExtraCoins' => 1]) }}"
@@ -76,8 +76,8 @@
             </div>
             @if ($user->verified_deposit == 'verified')
                 <div class="bg-white border rounded-lg p-6 shadow-md">
-                    <h2 class="text-2xl font-bold mb-4 capitalize">Rs {{ $user?->wallet?->pkr ?? 0 }}</h2>
-                    @if ($user?->wallet?->pkr > 0 && $user?->wallet?->pkr >= 200)
+                    <h2 class="text-2xl font-bold mb-4 capitalize">Rs {{ $user?->wallet?->convert_to_pkr }}</h2>
+                    @if ($user?->wallet?->convert_to_pkr > 0 && $user?->wallet?->convert_to_pkr >= 200)
                         @if ($user?->account)
                             <a href="{{ route('withdraw.request', ['user' => $user]) }}"
                                 class="px-2 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">

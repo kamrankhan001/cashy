@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('easy_asa_account_title')->nullable();
             $table->string('easy_asa_account_number')->nullable();
             $table->string('per_coin_price')->default('0.2');
+            $table->string('extra_coin_price')->default('0.1');
             $table->timestamps();
         });
     }
