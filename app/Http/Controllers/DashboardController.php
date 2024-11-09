@@ -142,7 +142,7 @@ class DashboardController extends Controller
 
         // Update or create the wallet
         if ($user->wallet) {
-            $user->wallet->amount += ($coinPrWork[$user->level]/$perCoin);
+            $user->wallet->amount += ($coinPrWork[$user->level]/$perCoin)/$levelLimits[$user->level];
             $user->wallet->pkr += (($coinPrWork[$user->level]/$levelLimits[$user->level]));
             $user->wallet->save();
         } else {

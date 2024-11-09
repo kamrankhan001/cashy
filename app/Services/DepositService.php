@@ -74,8 +74,23 @@ class DepositService
 
     public function addExtraCoins($inviter, $perCoins)
     {
+        $levelLimits = [
+            1 => 5,
+            2 => 10,
+            3 => 15,
+            4 => 20,
+            5 => 25,
+            6 => 30,
+            7 => 35,
+            8 => 40,
+            9 => 45,
+            10 => 50,
+        ];
+
         $extraCoins = Level::pluck('extra_coins', 'level_number')->toArray();
-        $inviter->wallet->extra_coins += $extraCoins[$inviter->level];
+        $extraCoin = Setting::first()->extra_coin_price;
+
+        $inviter->wallet->extra_coins += ($extraCoins[$inviter->level]/$extraCoin);
     }
 
     public function updateInviterLevel($inviter)

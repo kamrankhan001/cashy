@@ -55,7 +55,7 @@
 
                 <div class="bg-white border rounded-lg p-6 shadow-md">
                     <h2 class="text-2xl font-bold mb-4 capitalize">Extra Coins</h2>
-                    <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->extra_coins * 5 ?? 0 }}</p>
+                    <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->extra_coins ?? 0 }}</p>
                     @if ($user?->level >= 2)
                         @if ($user?->wallet?->extra_coins > 0)
                             <a href="{{ route('convert.to.pkr', ['user' => $user, 'isExtraCoins' => 1]) }}"
