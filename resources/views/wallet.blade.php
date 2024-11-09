@@ -56,7 +56,7 @@
                 <div class="bg-white border rounded-lg p-6 shadow-md">
                     <h2 class="text-2xl font-bold mb-4 capitalize">Extra Coins</h2>
                     <p class="text-gray-800 text-3xl font-semibold mb-6">{{ $user?->wallet?->extra_coins ?? 0 }}</p>
-                    @if ($user?->level >= 2)
+                    @if ($user?->level >= 2 && $user?->level != $user?->last_level)
                         @if ($user?->wallet?->extra_coins > 0)
                             <a href="{{ route('convert.to.pkr', ['user' => $user, 'isExtraCoins' => 1]) }}"
                                 class="px-2 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
@@ -69,7 +69,7 @@
                             </button>
                         @endif
                     @else
-                        <small class="text-gray-500">You can withdraw this at level 2.</small>
+                        <small class="text-gray-500">You can withdraw this at next level.</small>
                     @endif
                 </div>
 

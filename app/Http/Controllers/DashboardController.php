@@ -223,6 +223,10 @@ class DashboardController extends Controller
         if ($isExtraCoins) {
             $user->wallet->convert_to_pkr += $settings->extra_coin_price * $user?->wallet?->extra_coins;
             $user->wallet->extra_coins = 0;
+            if($user->level < 10){
+                $user->last_level = $user->level;
+                $user->save();
+            }
         } else {
             $user->wallet->convert_to_pkr +=  $user->wallet->pkr;
             $user->wallet->pkr = 0;

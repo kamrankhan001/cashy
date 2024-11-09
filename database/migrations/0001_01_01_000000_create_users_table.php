@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('initial_deposit', ['no', 'yes'])->default('no');
             $table->enum('verified_deposit', ['pending', 'verified'])->default('pending');
             $table->enum('level', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])->default(1);
+            $table->enum('last_level', [1, 2, 3, 4, 5, 6, 7, 8, 9])->nullable();
             $table->integer('work_limit')->default(5);
             $table->integer('original_work_limit')->nullable();
             $table->date('last_viewed_date')->nullable();
