@@ -30,6 +30,7 @@ return new class extends Migration
             $table->date('last_viewed_date')->nullable();
             $table->string('ref_link')->nullable();
             $table->date('last_ref_date')->nullable();
+            $table->boolean('inviter_got_coins')->default(0)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

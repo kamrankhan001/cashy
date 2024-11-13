@@ -238,27 +238,9 @@ class DashboardController extends Controller
         return redirect()->back()->with('success', 'Convert into PKR successfully');
     }
 
-    // public function extraCoinConvert(User $user)
-    // {
-    //     $user->wallet->amount += $user->wallet->extra_coins;
-    //     $user->wallet->extra_coins = 0;
-    //     $user->wallet->save();
-
-    //     return redirect()->back()->with('success', 'Extra coins convert into PKR successfully');
-    // }
 
     public function requestForWithdraw(User $user)
     {
-        // $request->validate([
-        //     'amount' => 'required|numeric|min:0',
-        // ]);
-
-        // $coinPrice = Setting::first()->per_coin_price;
-
-        // if ($user?->wallet?->amount * $coinPrice < $request->amount) {
-        //     return redirect()->back()->with('warning', 'Please enter valid amount');
-        // }
-
         if($user->wallet->convert_to_pkr < 200){
             return redirect()->back()->with('warning', 'Your have insufficient balance');
         }
@@ -274,13 +256,6 @@ class DashboardController extends Controller
 
         $user->wallet->convert_to_pkr = 0;
         $user->wallet->save();
-
-        // if ($user->wallet->amount * $coinPrice >= 200) {
-        //     $user->wallet->amount = $user->wallet->amount - $request->amount / $coinPrice;
-        //     $user->wallet->save();
-        // } else {
-        //     return redirect()->back()->with('warning', 'Your have insufficient balance');
-        // }
 
         return redirect()->back()->with('success', 'your request submitted successfully');
     }

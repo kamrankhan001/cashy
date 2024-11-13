@@ -45,28 +45,30 @@
             <h2 class="text-2xl text-white font-bold mb-4 p-6 bg-indigo-900">Members</h2>
             <div class="space-y-4 px-2">
                 @forelse ($user->references()->latest()->get() as $member)
-                    <div id="member-{{ $member->id }}"
-                        class="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-center">
-                        <div>
-                            <h3 class="text-lg font-semibold mb-1">{{ $member->inviteeUser->name }}</h3>
-                            <p class="text-gray-700">Email: {{ $member->inviteeUser->email }}</p>
-                            <p class="text-gray-700">Joined on: {{ $member->created_at->format('M d, Y') }}</p>
+                    @if ($member->inviteeUser->verified_deposit == 'verified')
+                        <div id="member-{{ $member->id }}"
+                            class="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-1">{{ $member->inviteeUser->name }}</h3>
+                                <p class="text-gray-700">Email: {{ $member->inviteeUser->email }}</p>
+                                <p class="text-gray-700">Joined on: {{ $member->created_at->format('M d, Y') }}</p>
+                            </div>
+                            <div>
+                                <p>Initial Deposit</p>
+                                <span
+                                    class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $member->inviteeUser->initial_deposit == 'yes' ? 'bg-green-500' : 'bg-gray-400' }}">
+                                    {{ $member->inviteeUser->initial_deposit }}
+                                </span>
+                            </div>
+                            <div>
+                                <p>Deposit Verify</p>
+                                <span
+                                    class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $member->inviteeUser->verified_deposit == 'verified' ? 'bg-green-500' : 'bg-gray-400' }}">
+                                    {{ $member->inviteeUser->verified_deposit }}
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <p>Initial Deposit</p>
-                            <span
-                                class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $member->inviteeUser->initial_deposit == 'yes' ? 'bg-green-500' : 'bg-gray-400' }}">
-                                {{ $member->inviteeUser->initial_deposit }}
-                            </span>
-                        </div>
-                        <div>
-                            <p>Deposit Verify</p>
-                            <span
-                                class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full {{ $member->inviteeUser->verified_deposit == 'verified' ? 'bg-green-500' : 'bg-gray-400' }}">
-                                {{ $member->inviteeUser->verified_deposit }}
-                            </span>
-                        </div>
-                    </div>
+                    @endif
                 @empty
                     <div class="p-4 text-gray-500 text-center text-xl">No member found.</div>
                 @endforelse

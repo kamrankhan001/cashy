@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\DepositService;
 use App\Models\User;
 
 class AdminUserController extends Controller
@@ -38,10 +39,12 @@ class AdminUserController extends Controller
         return view('admin.users.edit-user', compact('user'));
     }
 
-    public function updateDepositStatus(Request $request, User $user)
+    public function updateDepositStatus(Request $request, User $user, DepositService $depositService)
     {
         $user->verified_deposit = $request->verified_deposit;
         $user->save();
+
+        $depositService->handleReferralBonus($user);
 
         return redirect()->back()->with('success', 'Deposit status update successfully');
     }
