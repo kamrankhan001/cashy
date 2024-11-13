@@ -259,7 +259,7 @@ class DashboardController extends Controller
         //     return redirect()->back()->with('warning', 'Please enter valid amount');
         // }
 
-        if($user->wallet->pkr < 200){
+        if($user->wallet->convert_to_pkr < 200){
             return redirect()->back()->with('warning', 'Your have insufficient balance');
         }
 
@@ -268,11 +268,11 @@ class DashboardController extends Controller
         }
 
         WithdrawRequest::create([
-            'amount' => $user->wallet->pkr,
+            'amount' => $user->wallet->convert_to_pkr,
             'user_id' => auth()->user()->id,
         ]);
 
-        $user->wallet->pkr = 0;
+        $user->wallet->convert_to_pkr = 0;
         $user->wallet->save();
 
         // if ($user->wallet->amount * $coinPrice >= 200) {
