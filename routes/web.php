@@ -81,6 +81,7 @@ Route::prefix('admin')
         Route::get('/users', [AdminUserController::class, 'index'])->name('users');
         Route::get('/users/{user}/view', [AdminUserController::class, 'view'])->name('users.view');
         Route::get('/users/{user}/edit', [AdminUserController::class, 'userAccountEdit'])->name('users.edit');
+        Route::delete('/users/del', [AdminUserController::class, 'destroy'])->name('users.del');
         Route::put('/users/{user}/update/deposit/status', [AdminUserController::class, 'updateDepositStatus'])->name('users.updateDepositStatus');
 
         // Add Work

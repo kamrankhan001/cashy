@@ -48,4 +48,12 @@ class AdminUserController extends Controller
 
         return redirect()->back()->with('success', 'Deposit status update successfully');
     }
+
+    public function destroy(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User deleted successfully');
+    }
 }
