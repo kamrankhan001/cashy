@@ -49,9 +49,9 @@ class DashboardController extends Controller
         if ($user->last_viewed_date != $today) {
 
             $inviter = $user->invitedBy?->first();
-            if($inviter){
+            if ($inviter) {
                 $inviterUser = User::find($inviter->inviter);
-                $fivePercent = ($user->wallet->daily_earning*5)/100; // give 5% to the inviter
+                $fivePercent = ($user->wallet->daily_earning * 5) / 100; // give 5% to the inviter
                 $inviterUser->wallet->amount += $fivePercent;
                 $inviterUser->wallet->save();
 
@@ -142,13 +142,13 @@ class DashboardController extends Controller
 
         // Update or create the wallet
         if ($user->wallet) {
-            $user->wallet->amount += ($coinPrWork[$user->level]/$perCoin)/$levelLimits[$user->level];
-            $user->wallet->pkr += (($coinPrWork[$user->level]/$levelLimits[$user->level]));
+            $user->wallet->amount += ($coinPrWork[$user->level] / $perCoin) / $levelLimits[$user->level];
+            $user->wallet->pkr += (($coinPrWork[$user->level] / $levelLimits[$user->level]));
             $user->wallet->save();
         } else {
             Wallet::create([
-                'amount' => ($coinPrWork[$user->level]/$perCoin),
-                'pkr' => (($coinPrWork[$user->level]/$levelLimits[$user->level])/$perCoin),
+                'amount' => ($coinPrWork[$user->level] / $perCoin),
+                'pkr' => (($coinPrWork[$user->level] / $levelLimits[$user->level]) / $perCoin),
                 'user_id' => $user->id,
             ]);
         }
@@ -158,10 +158,10 @@ class DashboardController extends Controller
 
         // Check if daily earning needs to be reset
         if ($user->wallet->last_earning_date !== $today) {
-            $user->wallet->daily_earning = ($coinPrWork[$user->level]/$perCoin); // Set to current earning for today
+            $user->wallet->daily_earning = ($coinPrWork[$user->level] / $perCoin); // Set to current earning for today
             $user->wallet->last_earning_date = $today; // Update last earning date
         } else {
-            $user->wallet->daily_earning += ($coinPrWork[$user->level]/$perCoin); // Increment daily earning
+            $user->wallet->daily_earning += ($coinPrWork[$user->level] / $perCoin); // Increment daily earning
         }
 
         $user->wallet->save();
@@ -204,7 +204,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        if($withdraw){
+        if ($withdraw) {
             return redirect()->back()->with('success', 'Your account information saved. you can withdraw now.');
         }
 
@@ -223,12 +223,12 @@ class DashboardController extends Controller
         if ($isExtraCoins) {
             $user->wallet->convert_to_pkr += $settings->extra_coin_price * $user?->wallet?->extra_coins;
             $user->wallet->extra_coins = 0;
-            if($user->level < 10){
+            if ($user->level < 10) {
                 $user->last_level = $user->level;
                 $user->save();
             }
         } else {
-            $user->wallet->convert_to_pkr +=  $user->wallet->pkr;
+            $user->wallet->convert_to_pkr += $user->wallet->pkr;
             $user->wallet->pkr = 0;
             $user->wallet->amount = 0;
         }
@@ -241,12 +241,12 @@ class DashboardController extends Controller
 
     public function requestForWithdraw(User $user)
     {
-        if($user->wallet->convert_to_pkr < 200){
+        if ($user->wallet->convert_to_pkr < 200) {
             return redirect()->back()->with('warning', 'Your have insufficient balance');
         }
 
-        if(!$user->account){
-            return redirect()->route('profile', ['user'=>$user])->with('success', 'Please provide the bank information');
+        if (!$user->account) {
+            return redirect()->route('profile', ['user' => $user])->with('success', 'Please provide the bank information');
         }
 
         WithdrawRequest::create([
@@ -262,8 +262,14 @@ class DashboardController extends Controller
 
     public function team(User $user)
     {
-        $levels = Level::all();
+        $invitees = $user->references()->get();
 
-        return view('team', compact('user', 'levels'));
+        // Get total member
+        $totalMembers = $invitees->filter(function ($invitee) {
+            $user = User::find($invitee->invitee);
+            return $user && $user->verified_deposit == 'verified';
+        })->count();
+
+        return view('team', compact('user', 'totalMembers'));
     }
 }

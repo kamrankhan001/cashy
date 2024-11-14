@@ -20,7 +20,7 @@
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-4a1 1 0 012 0v1h-2v-1zM4.293 9.707a1 1 0 011.414 0L10 14.414l4.293-4.707a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414z"
                         clip-rule="evenodd" />
                 </svg>
-                <p class="text-4xl font-semibold">Total Members: {{ $user?->references()->count() }}</p>
+                <p class="text-4xl font-semibold">Total Members: {{ $totalMembers }}</p>
             </div>
 
             <!-- User Level with Icon -->
