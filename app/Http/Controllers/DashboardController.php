@@ -50,12 +50,16 @@ class DashboardController extends Controller
 
             $inviter = $user->invitedBy?->first();
             if ($inviter) {
+                $settings = Setting::first();
                 $inviterUser = User::find($inviter->inviter);
                 $fivePercent = ($user->wallet->daily_earning * 5) / 100; // give 5% to the inviter
                 $inviterUser->wallet->amount += $fivePercent;
+                $inviterUser->wallet->pkr += ($fivePercent * $settings->per_coin_price);
                 $inviterUser->wallet->save();
 
                 $user->wallet->amount -= $fivePercent;
+                $user->wallet->pkr -= ($fivePercent * $settings->per_coin_price);
+                $user->wallet->save();
             }
 
             $initialRefsCount = Reference::where('inviter', $user->id)
@@ -158,10 +162,10 @@ class DashboardController extends Controller
 
         // Check if daily earning needs to be reset
         if ($user->wallet->last_earning_date !== $today) {
-            $user->wallet->daily_earning = ($coinPrWork[$user->level] / $perCoin); // Set to current earning for today
+            $user->wallet->daily_earning = ($coinPrWork[$user->level] / $perCoin) / $levelLimits[$user->level]; // Set to current earning for today
             $user->wallet->last_earning_date = $today; // Update last earning date
         } else {
-            $user->wallet->daily_earning += ($coinPrWork[$user->level] / $perCoin); // Increment daily earning
+            $user->wallet->daily_earning += ($coinPrWork[$user->level] / $perCoin) / $levelLimits[$user->level]; // Increment daily earning
         }
 
         $user->wallet->save();

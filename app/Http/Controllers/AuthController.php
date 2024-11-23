@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Mail\RegisterConfirmMail;
 use Illuminate\Support\Facades\Mail;
-use App\Models\{User, Reference, Wallet};
+use App\Models\{User, Reference, Wallet, PasswordForget};
 
 class AuthController extends Controller
 {
@@ -109,6 +109,31 @@ class AuthController extends Controller
         $request->session()->regenerateToken(); // Regenerate the CSRF token
 
         return redirect()->route('login'); // Redirect to the login page
+    }
+
+    public function passwordForget()
+    {
+        return view('auth.forget-password');
+    }
+
+    public function passwordForgetStore(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if(!$user){
+            return redirect()->back()->with('error', 'Oops! the email not found in our records');
+        }
+
+        PasswordForget::create([
+            'user_id' => $user->id,
+            'password_reset' => 'no',
+        ]);
+
+        return redirect()->back()->with('success', 'Your request for password reset submitted.');
     }
 
     public function confirmRegistration()

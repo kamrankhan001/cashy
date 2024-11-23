@@ -80,4 +80,9 @@ class User extends Authenticatable
             ->withPivot('isVisited') // Include pivot table data
             ->withTimestamps(); // Capture created_at and updated_at
     }
+
+    public function passwordReset()
+    {
+        return $this->hasOne(PasswordForget::class);
+    }
 }

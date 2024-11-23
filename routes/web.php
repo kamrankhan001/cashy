@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{AuthController, DashboardController};
-use App\Http\Controllers\Admin\{AdminDashboardController, AdminUserController, AdminWorkController, AdminSettingController, AdminWithDrawController};
+use App\Http\Controllers\Admin\{AdminDashboardController, AdminUserController, AdminWorkController, AdminSettingController, AdminWithDrawController, AdminPasswordReset};
 
 Route::get('clear-all', function () {
     Artisan::call('cache:clear');
@@ -26,6 +26,11 @@ Route::post('/register', [AuthController::class, 'store'])->name('store.register
 
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'check'])->name('check.login');
+
+Route::get('/password-forget', [AuthController::class, 'passwordForget'])->name('password.forget');
+Route::post('/password-forget', [AuthController::class, 'passwordForgetStore'])->name('password.forget.store');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/confirm-registration', [AuthController::class, 'confirmRegistration'])->name('confirm.registration');
@@ -61,8 +66,6 @@ Route::middleware('auth')->group(function () {
 
         // Wallet
         Route::get('/wallet/{user}', [DashboardController::class, 'wallet'])->name('wallet');
-        // Route::get('/wallet/{user}/extra/coins/convert', [DashboardController::class, 'extraCoinConvert'])->name('extra.coins.convert');
-        // Route::post('/request/for/withdraw/{user}', [DashboardController::class, 'requestForWithdraw'])->name('request.withdraw');
         Route::get('/convert/{user}/to/{isExtraCoins}/pkr', [DashboardController::class, 'convertToPKR'])->name('convert.to.pkr');
         Route::get('/withdraw/{user}/request', [DashboardController::class, 'requestForWithdraw'])->name('withdraw.request');
 
@@ -94,6 +97,11 @@ Route::prefix('admin')
         Route::get('/withdraw/request', [AdminWithDrawController::class, 'index'])->name('withdraw');
         Route::get('/withdraw/request/{withDrawRequest}', [AdminWithDrawController::class, 'userDetails'])->name('withdraw.user');
         Route::put('/withdraw/request/{withDrawRequest}', [AdminWithDrawController::class, 'requestUpdate'])->name('withdraw.request.update');
+
+        // Password Reset
+        Route::get('/password/reset/requests', [AdminPasswordReset::class, 'index'])->name('password.reset');
+        Route::get('/password/{reset}/reset/{user}/change', [AdminPasswordReset::class, 'passwordChange'])->name('password.change');
+        Route::put('/password/{reset}/reset/{user}/done', [AdminPasswordReset::class, 'passwordChangeDone'])->name('password.change.done');
 
         // Setting
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings');
